@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Script from 'next/script';
 import { setupIonicReact } from '@ionic/react';
+import { ApolloProvider } from '@apollo/client';
+import client from '../apollo-client';
 
 import 'tailwindcss/tailwind.css';
 /* Core CSS required for Ionic components to work properly */
@@ -31,7 +33,9 @@ function MyApp({ Component, pageProps }) {
           content="width=device-width, initial-scale=1.0, viewport-fit=cover"
         ></meta>
       </Head>
-      <Component {...pageProps} />
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
       <Script
         type="module"
         src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"

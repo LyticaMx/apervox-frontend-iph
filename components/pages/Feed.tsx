@@ -13,10 +13,12 @@ import {
   IonMenuButton,
 } from '@ionic/react';
 import Notifications from './Notifications';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { notificationsOutline } from 'ionicons/icons';
 import { getHomeItems } from '../../store/selectors';
 import Store from '../../store';
+import { withProvider } from '../../hoc/withProvider';
+import { CharactersProvider, useCharacters } from '../../context/Characters';
 
 const FeedCard = ({ title, type, text, author, authorAvatar, image }) => (
   <Card className="my-4 mx-auto">
@@ -38,8 +40,14 @@ const FeedCard = ({ title, type, text, author, authorAvatar, image }) => (
 );
 
 const Feed = () => {
+  const { actions, data } = useCharacters()
   const homeItems = Store.useState(getHomeItems);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    actions.getData()
+  }, [])
+
 
   return (
     <IonPage>
@@ -63,6 +71,8 @@ const Feed = () => {
           </IonToolbar>
         </IonHeader>
         <Notifications open={showNotifications} onDidDismiss={() => setShowNotifications(false)} />
+
+        <p>Total de personajes: {data.length}</p>
         {homeItems.map((i, index) => (
           <FeedCard {...i} key={index} />
         ))}
@@ -71,4 +81,5 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default withProvider(Feed, CharactersProvider);
+
