@@ -18,7 +18,7 @@ const ListEntry = ({ list, ...props }) => (
   </IonItem>
 );
 
-const AllLists = ({ onSelect }) => {
+const AllLists = () => {
   const lists = Store.useState(selectors.getLists);
 
   return (

@@ -66,6 +66,11 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@capacitor-community/native-audio@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/native-audio/-/native-audio-5.0.1.tgz#2fdb3d4d7021bcc2cea4c4769bc68565590ff549"
+  integrity sha512-dqfjofwSg2MJXE/ADFLF/D/bCHLYCMUanwZi8pXJKN0PVkDXoAfUSAkyHCs1L1dNygfU4qbr+9NMrXBiQ9jdtQ==
+
 "@capacitor/android@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-5.3.0.tgz#d6bf2db5f385ac9ec6bc9ccf080c253f3c7b3db8"
