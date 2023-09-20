@@ -10,6 +10,7 @@ import { MicrophoneIcon, PauseIcon, PhotoIcon, PlayIcon, StopIcon, TrashIcon } f
 import { Directory, Filesystem } from "@capacitor/filesystem";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { NativeAudio } from '@capacitor-community/native-audio'
 
 const AudioComponent = ({ play, removeFile, filePlaying, file }) => (
   <div className="lg:w-1/3 max-w-sm p-2 w-full">
@@ -34,10 +35,11 @@ const AudioComponent = ({ play, removeFile, filePlaying, file }) => (
   </div>
 );
 
+const path = 'audios'
 const Feed = () => {
   const [coords, setCoords] = useState()
   const [isRecording, setIsRecording] = useState(false)
-  const [filePlaying, setFilePlaying] = useState()
+  const [filePlaying, setFilePlaying] = useState<{name: string; audio: HTMLAudioElement } | undefined>()
   const [files, setFiles] = useState([])
 
   const handleRecording = () => {
@@ -59,13 +61,19 @@ const Feed = () => {
     if(value){
       const fileName = new Date().getTime() + '.wav'
 
-      await Filesystem.writeFile({
-        path: fileName,
-        directory: Directory.Data,
-        data: value.recordDataBase64
-      })
-
-      loadFiles()
+      try {
+        await Filesystem.writeFile({
+          path: `${path}/${fileName}`,
+          directory: Directory.Data,
+          data: value.recordDataBase64,
+          recursive: true
+        })
+  
+        loadFiles()
+      } catch (error) {
+        console.log("🚀 ~ error:", error)
+        
+      }
     }
   }
 
@@ -78,39 +86,51 @@ const Feed = () => {
       if(file.name === filePlaying.name) return
     }
 
-    setFilePlaying(file.name)
-    const res = await Filesystem.readFile({
-      path: file.name, 
-      directory: Directory.Data
-    })
+    try {
+      // await NativeAudio.preload({ assetId: file.name, assetPath: file.uri, isUrl: true })
+      // await NativeAudio.play({
+      //   assetId: file.name
+      // })
 
-    const audio = new Audio(`data:audio/aac;base64,${res.data}`)
+      console.log(file.uri)
 
-    setFilePlaying({
-      name: file.name,
-      audio
-    })
-    audio.oncanplaythrough = () => audio.play()
-    audio.onended = () => setFilePlaying(undefined)
-    audio.load()
+      const res = await Filesystem.readFile({
+        path: `${path}/${file.name}`, 
+        directory: Directory.Data
+      })
+  
+      const audio = new Audio(`data:audio/aac;base64,${res.data}`)
+  
+      setFilePlaying({
+        name: file.name,
+        audio
+      })
+      audio.oncanplaythrough = () => audio.play()
+      audio.onended = () => setFilePlaying(undefined)
+      audio.load()
+    } catch (error) {
+      console.log("🚀 ~ file: Audios.tsx:102 ~ play ~ error:", error)
+      
+    }
   }
 
   const loadFiles = async () => { 
     try {
       const res = await Filesystem.readdir({
-        path: '', 
+        path, 
         directory: Directory.Data
       })
       
       setFiles(res.files)
     } catch (error) {
+      console.log("🚀 ~ file: Audios.tsx:125 ~ loadFiles ~ error:", error)
       setFiles([])
     }
   }
   const removeFile = async (file) => {
     await Filesystem.deleteFile({
       directory: Directory.Data,
-      path: file.name
+      path: `${path}/${file.name}`
     })
 
     loadFiles()
