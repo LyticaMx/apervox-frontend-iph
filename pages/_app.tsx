@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }) {
         type="module"
         src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
       ></Script>
-      <Script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></Script>
+      {/* <Script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></Script> */}
     </>
   );
 }
