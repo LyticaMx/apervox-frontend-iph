@@ -17,7 +17,7 @@ import Store from '../../store';
 import * as actions from '../../store/actions';
 import * as selectors from '../../store/selectors';
 
-const ListItems = ({ list }) => {
+const ListItems = ({ list }: any) => {
   return (
     <IonList>
       {(list?.items || []).map((item, key) => (
@@ -34,9 +34,9 @@ const ListItemEntry = ({ list, item }) => (
   </IonItem>
 );
 
-const ListDetail = ({ match }) => {
+const ListDetail = ({ match }: any) => {
   const lists = Store.useState(selectors.getLists);
-  const params = useParams();
+  const params = useParams<{ listId: any}>();
   const { listId } = params;
   const loadedList = lists.find(l => l.id === listId);
 

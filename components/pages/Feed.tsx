@@ -47,14 +47,9 @@ const Charactercard = ({name, image}) =>(<Card>
   </Card>)
 
 const Feed = () => {
-  const { actions, data } = useCharacters()
+  const { data } = useCharacters()
   const homeItems = Store.useState(getHomeItems);
   const [showNotifications, setShowNotifications] = useState(false);
-
-  useEffect(() => {
-    actions.getData()
-  }, [])
-
 
   return (
     <IonPage>

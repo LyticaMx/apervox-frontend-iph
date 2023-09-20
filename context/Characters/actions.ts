@@ -1,6 +1,6 @@
 import { Dispatch } from 'react'
 import { useApolloClient } from '@apollo/client'
-import { Action } from 'types/contextReducer'
+import { Action } from '@/types/contextReducer'
 
 import { Actions, State } from './types'
 import { Types, actions } from './constants'
