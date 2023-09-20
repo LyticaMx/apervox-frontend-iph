@@ -39,17 +39,16 @@ const FeedCard = ({ title, type, text, author, authorAvatar, image }) => (
   </Card>
 );
 
-const Charactercard = ({name, image}) =>(<Card>
-  <div className="h-100 w-full relative">
-    <img src={image} alt={name} className="rounded-t-xl object-cover min-w-full min-h-full max-w-full max-h-full" />
-  <h1 className="font-bold text-2xl text-gray-800 dark:text-gray-100">{name}</h1>
-  </div>
-  </Card>)
 
 const Feed = () => {
-  const { data } = useCharacters()
+  const { actions, data } = useCharacters()
   const homeItems = Store.useState(getHomeItems);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    actions.getData()
+  }, [])
+
 
   return (
     <IonPage>
@@ -75,11 +74,6 @@ const Feed = () => {
         <Notifications open={showNotifications} onDidDismiss={() => setShowNotifications(false)} />
 
         <p>Total de personajes: {data.length}</p>
-        {/* {console.log("data", data)} */}
-     {data.map((i, index) => (
-          // <FeedCard {...i} key={index} />
-          <Charactercard {...i}/>
-        ))}
         {homeItems.map((i, index) => (
           <FeedCard {...i} key={index} />
         ))}
