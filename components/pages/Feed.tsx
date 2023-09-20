@@ -39,10 +39,16 @@ const FeedCard = ({ title, type, text, author, authorAvatar, image }) => (
   </Card>
 );
 
+
 const Feed = () => {
-  const { data } = useCharacters()
+  const { actions, data } = useCharacters()
   const homeItems = Store.useState(getHomeItems);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    actions.getData()
+  }, [])
+
 
   return (
     <IonPage>
