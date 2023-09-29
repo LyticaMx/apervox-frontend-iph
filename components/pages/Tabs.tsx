@@ -8,7 +8,8 @@ import Audios from './Audios';
 import Lists from './Lists';
 import ListDetail from './ListDetail';
 import Settings from './Settings';
-import Operators from './Operators'
+import Operators from './Operators';
+import { ActivityDetail } from './ActivityDetail';
 const Tabs = () => {
   return (
     <IonTabs>
@@ -19,6 +20,7 @@ const Tabs = () => {
         <Route path="/tabs/lists/:listId" render={() => <ListDetail />} exact={true} />
         <Route path="/tabs/settings" render={() => <Settings />} exact={true} />
         <Route path="/tabs/operators" render={() => <Operators />} exact={true} />
+        <Route path="/tabs/ActivityDetail" render={() => <ActivityDetail />} exact={true} />
         <Route path="/tabs" render={() => <Redirect to="/tabs/feed" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
@@ -38,7 +40,7 @@ const Tabs = () => {
           <IonIcon icon={cog} />
           <IonLabel>Settings</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab4" href="/tabs/operators">
+        <IonTabButton tab="tab4" href="/tabs/ActivityDetail">
           <IonIcon icon={cog} />
           <IonLabel>Operators</IonLabel>
         </IonTabButton>
