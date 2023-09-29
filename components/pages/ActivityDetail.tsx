@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 import { navigate, time } from 'ionicons/icons';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import {
@@ -14,11 +14,6 @@ import {
 } from '@ionic/react';
 
 export const ActivityDetail = () => {
-  const [renderMap, setRenderMap] = useState(false);
-  useLayoutEffect(() => {
-    setTimeout(() => setRenderMap(true), 100);
-  }, []);
-
   return (
     <IonPage>
       <IonHeader>
@@ -47,19 +42,17 @@ export const ActivityDetail = () => {
         <div className="mt-2"></div>
         <IonCard>
           <IonCardContent>
-            {renderMap && (
-              <MapContainer center={[51.505, -0.091]} zoom={13} style={{ height: '500px' }}>
-                <TileLayer
-                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[51.505, -0.091]}>
-                  <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                  </Popup>
-                </Marker>
-              </MapContainer>
-            )}
+            <MapContainer center={[51.505, -0.091]} zoom={13} style={{ height: '500px' }}>
+              <TileLayer
+                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[51.505, -0.091]}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+              </Marker>
+            </MapContainer>
           </IonCardContent>
         </IonCard>
         <IonButton expand="full" color="medium">
