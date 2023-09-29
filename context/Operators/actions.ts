@@ -5,7 +5,7 @@ import { Actions, State } from './types'
 import { Types, actions } from './constants'
 import { GET_OPERATORS } from './queries.graphql'
 
-export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Actions => {
+export const useActions = (state: State, dispatch): Actions => {
   const client = useApolloClient()
 
   const getData = async (page?: number): Promise<void> => {
