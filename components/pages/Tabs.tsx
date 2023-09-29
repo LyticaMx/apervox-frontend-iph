@@ -2,6 +2,9 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonRouterOutlet, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { cog, flash, list, document } from 'ionicons/icons';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import Home from './Feed';
 import Audios from './Audios';
@@ -11,6 +14,50 @@ import Settings from './Settings';
 import Operators from './Operators';
 import { ActivityDetail } from './ActivityDetail';
 const Tabs = () => {
+  let history = useHistory();
+
+  useEffect(() => {
+    registerNotifications();
+  }, []);
+
+  const redirect = url => {
+    if (url.notification.data.urlRedirect) {
+      history.push(url.notification.data.urlRedirect);
+    }
+  };
+
+  const registerNotifications = async () => {
+    let permStatus = await PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+
+    await PushNotifications.register();
+    addListeners();
+  };
+
+  const addListeners = async () => {
+    await PushNotifications.addListener('registration', token => {
+      console.info('Registration token: ', token.value);
+    });
+
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Registration error: ', err.error);
+    });
+
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push notification received: ', notification);
+    });
+
+    await PushNotifications.addListener('pushNotificationActionPerformed', (notification: any) => {
+      redirect(notification);
+    });
+  };
   return (
     <IonTabs>
       <IonRouterOutlet>
