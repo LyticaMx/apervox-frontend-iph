@@ -21,12 +21,13 @@ export const ActivityDetail = () => {
           <IonTitle>Posible robo de autopartes</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Posible robo de autopartes</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+
+      <IonHeader collapse="condense">
+        <IonToolbar>
+          <IonTitle size="large">Posible robo de autopartes</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
         <p>
           Se ha reportado el posible robo de un espejo lateral perteneciente a un auto modelo KIA
           Rio. en el sitio se encuentra el propietario del automóvil.

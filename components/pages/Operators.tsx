@@ -6,17 +6,24 @@ import {
   IonButtons,
   IonContent,
   IonMenuButton,
+  IonButton,
 } from '@ionic/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { withProvider } from '../../hoc/withProvider';
 import { OperatorProvider, useOperators } from '../../context/Operators';
+import { FormProfile } from '../ui/FormProfile/FormProfile';
 
 const Operators = () => {
   const { actions, data } = useOperators();
+  const formikRef = useRef(null);
 
   useEffect(() => {
-    actions.getData();
+    // actions.getData();
   }, []);
+
+  const sendOperator = values => {
+    console.log('---send', values);
+  };
 
   return (
     <IonPage>
@@ -34,11 +41,23 @@ const Operators = () => {
             <IonTitle size="large">Feed</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {data.map(operator => (
+        <FormProfile sendForm={sendOperator} />
+        <FormProfile
+          sendForm={sendOperator}
+          initialValues={{ firstName: 'Luis', fathersName: 'Hernandez', mothersName: 'Salas' }}
+        />
+        <FormProfile
+          sendForm={sendOperator}
+          initialValues={{ firstName: 'Luis', fathersName: 'Hernandez', mothersName: 'Salas' }}
+          formikRef={formikRef}
+          button={false}
+        />
+        <IonButton onClick={() => formikRef?.current?.submitForm()}>enviar button</IonButton>
+        {/* {data.map(operator => (
           <div key={operator?.id}>
             <h1>{operator?.fullName}</h1>
           </div>
-        ))}
+        ))} */}
       </IonContent>
     </IonPage>
   );
