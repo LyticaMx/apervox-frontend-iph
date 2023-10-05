@@ -12,7 +12,7 @@ import {
   IonContent,
   IonMenuButton,
 } from '@ionic/react';
-import Notifications from './Notifications';
+import Notifications from './Notificationss';
 import { useEffect, useState } from 'react';
 import { notificationsOutline } from 'ionicons/icons';
 import { getHomeItems } from '../../store/selectors';

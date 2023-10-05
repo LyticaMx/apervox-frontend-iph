@@ -14,50 +14,51 @@ import Settings from './Settings';
 import Operators from './Operators';
 import { ActivityDetail } from './ActivityDetail';
 const Tabs = () => {
-  let history = useHistory();
+  // let history = useHistory();
 
-  useEffect(() => {
-    registerNotifications();
-  }, []);
+  // useEffect(() => {
+  //   // registerNotifications();
+  // }, []);
 
-  const redirect = url => {
-    if (url.notification.data.urlRedirect) {
-      history.push(url.notification.data.urlRedirect);
-    }
-  };
+  // const redirect = url => {
+  //   if (url.notification.data.urlRedirect) {
+  //     history.push(url.notification.data.urlRedirect);
+  //   }
+  // };
 
-  const registerNotifications = async () => {
-    let permStatus = await PushNotifications.checkPermissions();
+  // const registerNotifications = async () => {
+  //   let permStatus = await PushNotifications.checkPermissions();
 
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
-    }
+  //   if (permStatus.receive === 'prompt') {
+  //     permStatus = await PushNotifications.requestPermissions();
+  //   }
 
-    if (permStatus.receive !== 'granted') {
-      throw new Error('User denied permissions!');
-    }
+  //   if (permStatus.receive !== 'granted') {
+  //     throw new Error('User denied permissions!');
+  //   }
 
-    await PushNotifications.register();
-    addListeners();
-  };
+  //   await PushNotifications.register();
+  //   addListeners();
+  // };
 
-  const addListeners = async () => {
-    await PushNotifications.addListener('registration', token => {
-      console.info('Registration token: ', token.value);
-    });
+  // const addListeners = async () => {
+  //   await PushNotifications.addListener('registration', token => {
+  //     console.info('Registration token: ', token.value);
+  //   });
 
-    await PushNotifications.addListener('registrationError', err => {
-      console.error('Registration error: ', err.error);
-    });
+  //   await PushNotifications.addListener('registrationError', err => {
+  //     console.error('Registration error: ', err.error);
+  //   });
 
-    await PushNotifications.addListener('pushNotificationReceived', notification => {
-      console.log('Push notification received: ', notification);
-    });
+  //   await PushNotifications.addListener('pushNotificationReceived', notification => {
+  //     console.log('Push notification received: ', notification);
+  //   });
 
-    await PushNotifications.addListener('pushNotificationActionPerformed', (notification: any) => {
-      redirect(notification);
-    });
-  };
+  //   await PushNotifications.addListener('pushNotificationActionPerformed', (notification: any) => {
+  //     redirect(notification);
+  //   });
+  // };
+
   return (
     <IonTabs>
       <IonRouterOutlet>

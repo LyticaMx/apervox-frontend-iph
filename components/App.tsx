@@ -10,6 +10,14 @@ import Lists from './pages/Lists';
 import ListDetail from './pages/ListDetail';
 import Settings from './pages/Settings';
 import Tabs from './pages/Tabs';
+import Notifications from './pages/notifications';
+import Notification from './pages/notification';
+import Note from './pages/note';
+import Case from './pages/case';
+import Arrested from './pages/arrested';
+import Witness from './pages/witness';
+import Place from './pages/place';
+import Evidence from './pages/evidence';
 
 setupIonicReact({});
 
@@ -27,7 +35,15 @@ const AppShell = () => {
       <IonReactRouter>
         <IonRouterOutlet id="main">
           <Route path="/tabs" render={() => <Tabs />} />
-          <Route path="/" render={() => <Redirect to="/tabs/feed" />} exact={true} />
+          <Route path="/notifications" render={() => <Notifications />} />
+          <Route path="/notification" render={() => <Notification />} />
+          <Route path="/nota-rapida" render={() => <Note />} />
+          <Route path="/case" render={() => <Case />} />
+          <Route path="/arrested" render={() => <Arrested />} />
+          <Route path="/witness" render={() => <Witness />} />
+          <Route path="/place" render={() => <Place />} />
+          <Route path="/evidence" render={() => <Evidence />} />
+          {/* <Route path="/" render={() => <Redirect to="/tabs/feed" />} exact={true} /> */}
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
