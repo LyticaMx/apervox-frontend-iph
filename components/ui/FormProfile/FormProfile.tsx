@@ -4,19 +4,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { IonButton } from '@ionic/react';
 
-export const FormProfile = ({
-  sendForm,
-  button = true,
-  initialValues = { firstName: '', fathersName: '', mothersName: '' },
-  formikRef = null,
-}) => {
+export const FormProfile = ({ sendForm, button = true, initialValues, formikRef = null }) => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required('El nombre es requerido'),
     fathersName: Yup.string().required('El apellido paterno es requerido'),
     mothersName: Yup.string().required('El apellido materno es requerido'),
   });
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues
+      ? initialValues
+      : { firstName: '', fathersName: '', mothersName: '' },
     validationSchema,
     onSubmit: values => {
       sendForm(values);

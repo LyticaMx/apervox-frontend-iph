@@ -13,6 +13,7 @@ import ListDetail from './ListDetail';
 import Settings from './Settings';
 import Operators from './Operators';
 import { ActivityDetail } from './ActivityDetail';
+import Case from './case';
 const Tabs = () => {
   // let history = useHistory();
 
@@ -69,6 +70,7 @@ const Tabs = () => {
         <Route path="/tabs/settings" render={() => <Settings />} exact={true} />
         <Route path="/tabs/operators" render={() => <Operators />} exact={true} />
         <Route path="/tabs/ActivityDetail" render={() => <ActivityDetail />} exact={true} />
+        <Route path="/tabs/cases" render={() => <Case />} exact={true} />
         <Route path="/tabs" render={() => <Redirect to="/tabs/feed" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

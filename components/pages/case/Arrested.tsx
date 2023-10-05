@@ -15,30 +15,48 @@ import { useHistory } from 'react-router';
 
 const Item = ({ data, onDelete, ...props }) => (
   <IonItem {...props}>
-    <IonLabel>{data.name}</IonLabel>
-    <IonButton slot="end" fill="clear" color="dark" onClick={(e) => {
-      e.preventDefault()
-      onDelete()
-      e.stopPropagation()
-    }}>
+    <IonLabel>{data.fullName}</IonLabel>
+    <IonButton
+      slot="end"
+      fill="clear"
+      color="dark"
+      onClick={e => {
+        e.preventDefault();
+        onDelete();
+        e.stopPropagation();
+      }}
+    >
       <IonIcon name="trash" />
     </IonButton>
   </IonItem>
 );
 
 const DetenidosModal = ({ open, onDidDismiss }) => {
-  const history = useHistory()
-  const confirm = useConfirm()
+  const history = useHistory();
+  const confirm = useConfirm();
 
   const items = [
-    {name: "Efrain Cuadras Gonzalez"},
-    {name: "Dulce Zazueta Aviles"}
-  ]
+    {
+      fathersName: 'Hernandez',
+      firstName: 'Luis',
+      fullName: 'Luis Hernandez salas ',
+      id: '651f31b0087d78ecb39074af',
+      mothersName: 'salas ',
+    },
+    {
+      fathersName: 'sabina',
+      firstName: 'Juaquin',
+      fullName: 'Juaquin sabina flores',
+      id: '651f348d087d78ecb39074b1',
+      mothersName: 'flores',
+    },
+  ];
 
-  const handleClick = () => { 
-    onDidDismiss()
-    history.push('/arrested') 
-  }
+  const handleClick = item => {
+    onDidDismiss();
+
+    history.push('/arrested', item);
+  };
 
   return (
     <IonModal isOpen={open} onDidDismiss={onDidDismiss}>
@@ -53,7 +71,12 @@ const DetenidosModal = ({ open, onDidDismiss }) => {
       <IonContent fullscreen>
         <IonList>
           {items.map((item, index) => (
-            <Item data={item} key={index} onClick={handleClick} onDelete={() => confirm('Seguro de querer eliminar al detenido?')}/>
+            <Item
+              data={item}
+              key={index}
+              onClick={() => handleClick(item)}
+              onDelete={() => confirm('Seguro de querer eliminar al detenido?')}
+            />
           ))}
         </IonList>
       </IonContent>
