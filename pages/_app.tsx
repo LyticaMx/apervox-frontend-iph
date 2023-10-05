@@ -3,8 +3,7 @@ import Script from 'next/script';
 import { setupIonicReact } from '@ionic/react';
 import { ApolloProvider } from '@apollo/client';
 import client from '../apollo-client';
-
-import 'tailwindcss/tailwind.css';
+import { NotificationsProvider } from '@/context/Notifications';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -23,7 +22,6 @@ import '@ionic/react/css/display.css';
 
 import '../styles/global.css';
 import '../styles/variables.css';
-import 'leaflet/dist/leaflet.css';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -33,9 +31,12 @@ function MyApp({ Component, pageProps }) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, viewport-fit=cover"
         ></meta>
+        <meta name="color-scheme" content="light" />
       </Head>
       <ApolloProvider client={client}>
-        <Component {...pageProps} />
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </ApolloProvider>
       <Script
         type="module"
