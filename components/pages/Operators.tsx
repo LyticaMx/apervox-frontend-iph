@@ -41,7 +41,6 @@ const Operators = () => {
             <IonTitle size="large">Feed</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <FormProfile sendForm={sendOperator} />
         <FormProfile
           sendForm={sendOperator}
           initialValues={{ firstName: 'Luis', fathersName: 'Hernandez', mothersName: 'Salas' }}
