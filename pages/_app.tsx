@@ -4,6 +4,7 @@ import { setupIonicReact } from '@ionic/react';
 import { ApolloProvider } from '@apollo/client';
 import client from '../apollo-client';
 import { NotificationsProvider } from '@/context/Notifications';
+import { CasesProvider } from '@/context/Cases';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <ApolloProvider client={client}>
         <NotificationsProvider>
-          <Component {...pageProps} />
+          <CasesProvider>
+            <Component {...pageProps} />
+          </CasesProvider>
         </NotificationsProvider>
       </ApolloProvider>
       <Script

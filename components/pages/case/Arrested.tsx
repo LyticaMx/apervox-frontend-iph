@@ -15,30 +15,31 @@ import { useHistory } from 'react-router';
 
 const Item = ({ data, onDelete, ...props }) => (
   <IonItem {...props}>
-    <IonLabel>{data.name}</IonLabel>
-    <IonButton slot="end" fill="clear" color="dark" onClick={(e) => {
-      e.preventDefault()
-      onDelete()
-      e.stopPropagation()
-    }}>
+    <IonLabel>{data.fullName}</IonLabel>
+    <IonButton
+      slot="end"
+      fill="clear"
+      color="dark"
+      onClick={e => {
+        e.preventDefault();
+        onDelete();
+        e.stopPropagation();
+      }}
+    >
       <IonIcon name="trash" />
     </IonButton>
   </IonItem>
 );
 
-const DetenidosModal = ({ open, onDidDismiss }) => {
-  const history = useHistory()
-  const confirm = useConfirm()
+const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
+  const history = useHistory();
+  const confirm = useConfirm();
 
-  const items = [
-    {name: "Efrain Cuadras Gonzalez"},
-    {name: "Dulce Zazueta Aviles"}
-  ]
+  const handleClick = item => {
+    onDidDismiss();
 
-  const handleClick = () => { 
-    onDidDismiss()
-    history.push('/arrested') 
-  }
+    history.push('/arrested', item);
+  };
 
   return (
     <IonModal isOpen={open} onDidDismiss={onDidDismiss}>
@@ -52,8 +53,13 @@ const DetenidosModal = ({ open, onDidDismiss }) => {
       </IonHeader>
       <IonContent fullscreen>
         <IonList>
-          {items.map((item, index) => (
-            <Item data={item} key={index} onClick={handleClick} onDelete={() => confirm('Seguro de querer eliminar al detenido?')}/>
+          {listItems.map((item, index) => (
+            <Item
+              data={item}
+              key={index}
+              onClick={() => handleClick(item)}
+              onDelete={() => confirm('Seguro de querer eliminar al detenido?')}
+            />
           ))}
         </IonList>
       </IonContent>
