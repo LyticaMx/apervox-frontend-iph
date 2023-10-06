@@ -4,6 +4,7 @@ export interface witness {
   fullName: string;
   id: string;
   mothersName: string;
+  mongoId: string;
 }
 export interface Node {
   mongoId: string;
@@ -15,6 +16,7 @@ export interface arresteds {
   firstName: string;
   fullName: string;
   mothersName: string;
+  mongoId: string;
 }
 
 export interface State {
