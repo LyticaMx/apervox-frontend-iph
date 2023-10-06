@@ -12,6 +12,7 @@ import {
   IonLabel,
 } from '@ionic/react';
 import { useHistory } from 'react-router';
+import { useCases } from '@/context/Cases';
 
 const Item = ({ data, onDelete, ...props }) => (
   <IonItem {...props}>
@@ -34,12 +35,15 @@ const Item = ({ data, onDelete, ...props }) => (
 const TestigosModal = ({ open, onDidDismiss, listItems }) => {
   const history = useHistory();
   const confirm = useConfirm();
+  const { actions } = useCases();
 
   const handleClick = witness => {
     onDidDismiss();
     history.push('/witness', witness);
   };
-
+  const handleDelete = item => {
+    actions.deleteWitness(item.mongoId);
+  };
   return (
     <IonModal isOpen={open} onDidDismiss={onDidDismiss}>
       <IonHeader>
@@ -57,7 +61,9 @@ const TestigosModal = ({ open, onDidDismiss, listItems }) => {
               data={item}
               key={index}
               onClick={() => handleClick(item)}
-              onDelete={() => confirm('Seguro de querer eliminar al detenido?')}
+              onDelete={() =>
+                confirm('¿Seguro de querer eliminar al testigo?', () => handleDelete(item))
+              }
             />
           ))}
         </IonList>

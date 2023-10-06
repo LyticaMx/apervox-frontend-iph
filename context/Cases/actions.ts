@@ -11,6 +11,8 @@ import {
   ADD_WITNESS,
   GET_ARRESTED,
   UPDATE_WITNESS,
+  DELETE_WITNESS,
+  DELETE_ARRESTED,
 } from './queries.graphql';
 
 const firstResponserId = '651f8e65aa4107d1f4096484';
@@ -27,7 +29,11 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
         firstResponserId,
       },
     });
-    getWitness();
+    const newWitness = {
+      ...res.data.addWitness.mongoId,
+      ...res.data.addWitness.profile,
+    };
+    dispatch(actions.getWitness([...state.witnessList, newWitness]));
 
     return res;
   };
@@ -41,8 +47,17 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
         firstResponserId,
       },
     });
+    const { updateWitness } = res.data;
+    const position = state.witnessList.findIndex(
+      element => element.mongoId === updateWitness.mongoId
+    );
+    const editWitness = {
+      ...updateWitness.mongoId,
+      ...updateWitness.profile,
+    };
+    state.witnessList[position] = editWitness;
+    dispatch(actions.getWitness([...state.witnessList]));
 
-    getWitness();
     return res;
   };
   const getWitness = async () => {
@@ -54,6 +69,15 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
     });
 
     dispatch(actions.getWitness(data));
+  };
+  const deleteWitness = async mongoId => {
+    const res = await client.mutate({ mutation: DELETE_WITNESS, variables: { mongoId } });
+
+    const position = state.witnessList.findIndex(
+      element => element.mongoId === res.data.deleteWitness.mongoId
+    );
+    state.witnessList.splice(position, 1);
+    dispatch(actions.getWitness([...state.witnessList]));
   };
   const getArrested = async () => {
     const res = await client.query({
@@ -75,7 +99,12 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
         firstResponserId,
       },
     });
-    getArrested();
+
+    const newArrested = {
+      mongoId: res.data.addArrested.mongoId,
+      ...res.data.addArrested.profile,
+    };
+    dispatch(actions.getArrested([...state.arrestedsList, newArrested]));
     return res;
   };
   const editArrested = async values => {
@@ -87,8 +116,29 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
         firstResponserId,
       },
     });
-    getArrested();
+    const { updateArrested } = res.data;
+    const position = state.arrestedsList.findIndex(
+      element => element.mongoId === updateArrested.mongoId
+    );
+    const editArrested = {
+      ...updateArrested.mongoId,
+      ...updateArrested.profile,
+    };
+    state.arrestedsList[position] = editArrested;
+    dispatch(actions.getWitness([...state.arrestedsList]));
+
     return res;
+  };
+
+  const deleteArrested = async mongoId => {
+    const res = await client.mutate({ mutation: DELETE_ARRESTED, variables: { mongoId } });
+
+    const position = state.arrestedsList.findIndex(
+      element => element.mongoId === res.data.deleteArrested.mongoId
+    );
+
+    state.arrestedsList.splice(position, 1);
+    dispatch(actions.getArrested([...state.arrestedsList]));
   };
 
   return {
@@ -98,5 +148,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
     addArrested,
     editArrested,
     getArrested,
+    deleteWitness,
+    deleteArrested,
   };
 };

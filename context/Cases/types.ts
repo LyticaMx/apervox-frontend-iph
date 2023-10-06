@@ -30,6 +30,8 @@ export interface Actions {
   getArrested: (page?: number) => Promise<void>;
   addArrested: (page?: number) => Promise<object>;
   editArrested: (page?: number) => Promise<object>;
+  deleteWitness: (idMongo: string) => Promise<void>;
+  deleteArrested: (idMongo: string) => Promise<void>;
 }
 
 export interface ContextType extends State {

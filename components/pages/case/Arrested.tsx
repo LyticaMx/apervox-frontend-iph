@@ -1,3 +1,4 @@
+import { useCases } from '@/context/Cases';
 import { useConfirm } from '@/hooks/useConfirm';
 import {
   IonModal,
@@ -34,11 +35,16 @@ const Item = ({ data, onDelete, ...props }) => (
 const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
   const history = useHistory();
   const confirm = useConfirm();
+  const { actions } = useCases();
 
   const handleClick = item => {
     onDidDismiss();
 
     history.push('/arrested', item);
+  };
+
+  const handleDelete = item => {
+    actions.deleteArrested(item.mongoId);
   };
 
   return (
@@ -58,7 +64,9 @@ const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
               data={item}
               key={index}
               onClick={() => handleClick(item)}
-              onDelete={() => confirm('Seguro de querer eliminar al detenido?')}
+              onDelete={() =>
+                confirm('Seguro de querer eliminar al detenido?', () => handleDelete(item))
+              }
             />
           ))}
         </IonList>
