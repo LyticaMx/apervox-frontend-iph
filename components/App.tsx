@@ -43,7 +43,7 @@ const AppShell = () => {
           <Route path="/witness" render={() => <Witness />} />
           <Route path="/place" render={() => <Place />} />
           <Route path="/evidence" render={() => <Evidence />} />
-          {/* <Route path="/" render={() => <Redirect to="/tabs/feed" />} exact={true} /> */}
+          <Route path="/" render={() => <Redirect to="/notifications" />} exact={true} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
