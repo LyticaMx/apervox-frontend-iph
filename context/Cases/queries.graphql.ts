@@ -62,6 +62,7 @@ export const ADD_WITNESS = gql`
         id
         mothersName
       }
+      mongoId
     }
   }
 `;
@@ -90,6 +91,7 @@ export const ADD_ARRESTED = gql`
         id
         mothersName
       }
+      mongoId
     }
   }
 `;
@@ -114,6 +116,7 @@ export const UPDATE_ARRESTED = gql`
         id
         mothersName
       }
+      mongoId
     }
   }
 `;
@@ -137,6 +140,23 @@ export const UPDATE_WITNESS = gql`
         id
         mothersName
       }
+      mongoId
+    }
+  }
+`;
+
+export const DELETE_WITNESS = gql`
+  mutation witness($mongoId: String!) {
+    deleteWitness(witnessToDelete: { id: $mongoId }) {
+      mongoId
+    }
+  }
+`;
+
+export const DELETE_ARRESTED = gql`
+  mutation arrested($mongoId: String!) {
+    deleteArrested(arrestedToDelete: { id: $mongoId }) {
+      mongoId
     }
   }
 `;

@@ -3,7 +3,7 @@ import { useIonAlert } from '@ionic/react';
 export const useConfirm = () => {
   const [confirm, dismiss] = useIonAlert();
 
-  return (message: string) =>
+  return (message: string, onOk: () => void) =>
     confirm(message, [
       {
         text: 'Cancel',
@@ -15,9 +15,7 @@ export const useConfirm = () => {
       {
         text: 'OK',
         role: 'confirm',
-        handler: () => {
-          console.log('Alert confirmed');
-        },
+        handler: onOk,
       },
     ]);
 };
