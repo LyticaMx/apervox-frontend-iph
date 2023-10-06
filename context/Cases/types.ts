@@ -4,6 +4,7 @@ export interface witness {
   fullName: string;
   id: string;
   mothersName: string;
+  mongoId: string;
 }
 export interface Node {
   mongoId: string;
@@ -15,6 +16,7 @@ export interface arresteds {
   firstName: string;
   fullName: string;
   mothersName: string;
+  mongoId: string;
 }
 
 export interface State {
@@ -30,6 +32,8 @@ export interface Actions {
   getArrested: (page?: number) => Promise<void>;
   addArrested: (page?: number) => Promise<object>;
   editArrested: (page?: number) => Promise<object>;
+  deleteWitness: (idMongo: string) => Promise<void>;
+  deleteArrested: (idMongo: string) => Promise<void>;
 }
 
 export interface ContextType extends State {
