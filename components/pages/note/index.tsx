@@ -6,11 +6,13 @@ import { navigate, time, informationCircleOutline } from 'ionicons/icons';
 import AudioCard from './AudioCard';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Directory, Filesystem } from '@capacitor/filesystem';
+import clsx from 'clsx';
 
 const path = 'notas'
 const Note = () => {
   const { notification, actions } = useNotifications()
   const history = useHistory()
+  const [emergency, setEmergency] = useState(false)
   const [files, setFiles] = useState([])
   const [isRecording, setIsRecording] = useState(false)
   const [filePlaying, setFilePlaying] = useState<{name: string; audio: HTMLAudioElement } | undefined>()
@@ -116,6 +118,10 @@ const Note = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Nota rápida</IonTitle>
+          <button slot='end' onClick={() => setEmergency(!emergency)} className={clsx('border border-red-500 text-red-500 bg-transparent px-2 py-0.5 text-sm mx-2 ring-0 outline-none focus:border-red-500 flex gap-2 items-center', { '!bg-red-500 !text-white ': emergency})}>
+            <IonIcon name="shield-outline"/>
+            Emergencia
+          </button>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
@@ -144,20 +150,23 @@ const Note = () => {
                 ))}
               </IonList>
             </div>
-            <div className='mt-auto flex flex-col gap-2'>
-              <IonCheckbox>Solicitar refuerzos</IonCheckbox>
-              <IonCheckbox>Uso de fuerza</IonCheckbox>
-              <div className='flex justify-center'>
-                <IonButton onClick={handleRecording}>
-                  <IonIcon name={isRecording ? "stop-outline" : "mic-outline"} aria-hidden="true"></IonIcon>
-                </IonButton>
-              </div>
-            </div>
+            
           </section>
         </div>
       </IonContent>
       <IonFooter className='ion-padding pt-0'>
-        <IonButton expand="block" onClick={() => history.push('case')}>Creación de folio</IonButton>
+        <IonButton className='w-full' disabled={!emergency} color="danger">Solicitar refuerzos</IonButton>
+        <IonButton className='w-full' disabled={!emergency} color="warning">Uso de fuerza</IonButton>
+        <div className='flex'>
+          <IonButton class='w-1/2' expand='block'>Falsa alarma</IonButton>
+          <IonButton class='w-1/2' expand='block' onClick={() => history.push('case')}>Iniciar proceso</IonButton>
+        </div>
+        <div className='w-full flex justify-center'>
+          <IonButton onClick={handleRecording}>
+            <IonIcon name={isRecording ? "stop-outline" : "mic-outline"} aria-hidden="true"></IonIcon>
+          </IonButton>
+        </div>
+
       </IonFooter>
     </IonPage>
   );

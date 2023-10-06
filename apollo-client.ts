@@ -35,7 +35,8 @@ const cache = new InMemoryCache({
   },
 });
 
-const URI = "http://ec2-52-26-247-226.us-west-2.compute.amazonaws.com:8002/graphql"
+// const URI = "http://ec2-52-26-247-226.us-west-2.compute.amazonaws.com:8002/graphql"
+const URI = "https://n20hheyn60.execute-api.us-west-2.amazonaws.com/graphql"
 const client = new ApolloClient({
     uri: URI,
     cache,
