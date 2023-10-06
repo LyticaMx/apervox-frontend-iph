@@ -12,7 +12,10 @@ export const reducer = (state: State, action: Action<Types>): State => {
       return { ...state, arrestedsList: action.payload };
     case Types.EDIT_WITNESS:
       return { ...state, witnessList: action.payload };
-
+    case Types.GET_WITNESS:
+      return { ...state, witnessList: action.payload };
+    case Types.GET_ARRESTED:
+      return { ...state, arrestedsList: action.payload };
     default:
       return state;
   }

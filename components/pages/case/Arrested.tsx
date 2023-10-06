@@ -31,26 +31,9 @@ const Item = ({ data, onDelete, ...props }) => (
   </IonItem>
 );
 
-const DetenidosModal = ({ open, onDidDismiss }) => {
+const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
   const history = useHistory();
   const confirm = useConfirm();
-
-  const items = [
-    {
-      fathersName: 'Hernandez',
-      firstName: 'Luis',
-      fullName: 'Luis Hernandez salas ',
-      id: '651f31b0087d78ecb39074af',
-      mothersName: 'salas ',
-    },
-    {
-      fathersName: 'sabina',
-      firstName: 'Juaquin',
-      fullName: 'Juaquin sabina flores',
-      id: '651f348d087d78ecb39074b1',
-      mothersName: 'flores',
-    },
-  ];
 
   const handleClick = item => {
     onDidDismiss();
@@ -70,7 +53,7 @@ const DetenidosModal = ({ open, onDidDismiss }) => {
       </IonHeader>
       <IonContent fullscreen>
         <IonList>
-          {items.map((item, index) => (
+          {listItems.map((item, index) => (
             <Item
               data={item}
               key={index}

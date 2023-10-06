@@ -10,13 +10,14 @@ export const FormProfile = ({ sendForm, button = true, initialValues, formikRef 
     fathersName: Yup.string().required('El apellido paterno es requerido'),
     mothersName: Yup.string().required('El apellido materno es requerido'),
   });
+
   const formik = useFormik({
     initialValues: initialValues
       ? initialValues
       : { firstName: '', fathersName: '', mothersName: '' },
     validationSchema,
     onSubmit: values => {
-      sendForm(values);
+      sendForm({ ...initialValues, ...values });
     },
   });
 

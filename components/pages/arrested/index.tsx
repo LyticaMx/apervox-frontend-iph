@@ -19,7 +19,7 @@ const Arrested = () => {
   const formikRef = useRef(null);
   const { state } = useLocation();
 
-  const back = () => history.goBack();
+  const back = () => history.replace('/case');
 
   const valuesForm =
     state !== undefined
@@ -34,9 +34,9 @@ const Arrested = () => {
   const sendForm = async values => {
     let response;
     if (state !== undefined) {
-      response = await actions.addArrested(values);
-    } else {
       response = await actions.editArrested(values);
+    } else {
+      response = await actions.addArrested(values);
     }
     if (Object.keys(response).length !== 0) back();
   };

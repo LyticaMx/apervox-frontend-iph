@@ -4,29 +4,66 @@ import { Action } from '@/types/contextReducer';
 
 import { Actions, State } from './types';
 import { Types, actions } from './constants';
-import { ADD_ARRESTED, UPDATE_ARRESTED } from './queries.graphql';
+import {
+  ADD_ARRESTED,
+  GET_WITNESS,
+  UPDATE_ARRESTED,
+  ADD_WITNESS,
+  GET_ARRESTED,
+  UPDATE_WITNESS,
+} from './queries.graphql';
+
+const firstResponserId = '651f8e65aa4107d1f4096484';
 
 export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Actions => {
   const client = useApolloClient();
 
-  const addWitness = async (page?: number): Promise<void> => {
-    // const res = await client.query({query: GET_CHARACTERS, variables: {
-    //   page: page ?? state.pagination.page
-    // }})
-    // const { results, info } = res.data.characters
-    // dispatch(actions.setData(results))
-    // dispatch(actions.setPagination({
-    //   count: info.count,
-    //   pages: info.pages,
-    //   page: page ?? state.pagination.page
-    // }))
+  const addWitness = async values => {
+    const res = await client.mutate({
+      mutation: ADD_WITNESS,
+      variables: {
+        ...values,
+        caseId: state.caseId,
+        firstResponserId,
+      },
+    });
+    getWitness();
+
+    return res;
   };
 
-  const editWitness = async (id: number): Promise<void> => {
-    // const res = await client.query({query: GET_CHARACTER, variables: {
-    //   id
-    // }})
-    // dispatch(actions.setCharacter(res.data.character))
+  const editWitness = async values => {
+    const res = await client.mutate({
+      mutation: UPDATE_WITNESS,
+      variables: {
+        ...values,
+        caseId: state.caseId,
+        firstResponserId,
+      },
+    });
+
+    getWitness();
+    return res;
+  };
+  const getWitness = async () => {
+    const res = await client.query({
+      query: GET_WITNESS,
+    });
+    const data = res.data.witnesses.edges.map(item => {
+      return { mongoId: item.node.mongoId, ...item.node.profile };
+    });
+
+    dispatch(actions.getWitness(data));
+  };
+  const getArrested = async () => {
+    const res = await client.query({
+      query: GET_ARRESTED,
+    });
+    const data = res.data.arresteds.edges.map(item => {
+      return { mongoId: item.node.mongoId, ...item.node.profile };
+    });
+
+    dispatch(actions.getArrested(data));
   };
 
   const addArrested = async values => {
@@ -34,11 +71,11 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       mutation: ADD_ARRESTED,
       variables: {
         ...values,
-        caseId: '651db9096d97107a897a11a2',
-        firstResponserId: '651db8ba6d97107a897a11a0',
+        caseId: state.caseId,
+        firstResponserId,
       },
     });
-
+    getArrested();
     return res;
   };
   const editArrested = async values => {
@@ -46,18 +83,20 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       mutation: UPDATE_ARRESTED,
       variables: {
         ...values,
-        caseId: '651db9096d97107a897a11a2',
-        firstResponserId: '651db8ba6d97107a897a11a0',
+        caseId: state.caseId,
+        firstResponserId,
       },
     });
-
+    getArrested();
     return res;
   };
 
   return {
     addWitness,
+    getWitness,
     editWitness,
     addArrested,
     editArrested,
+    getArrested,
   };
 };
