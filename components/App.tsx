@@ -18,6 +18,9 @@ import Arrested from './pages/arrested';
 import Witness from './pages/witness';
 import Place from './pages/place';
 import Evidence from './pages/evidence';
+import Support from './pages/support';
+import { useEffect } from 'react';
+import { useAuth } from '@/context/Auth';
 
 setupIonicReact({});
 
@@ -30,6 +33,12 @@ window.matchMedia("(prefers-color-scheme: dark)").addListener(async (status) => 
 });
 
 const AppShell = () => {
+  const {actions} = useAuth()
+
+  useEffect(() => {
+    actions.signIn()
+  }, [])
+
   return (
     <IonApp>
       <IonReactRouter>
@@ -43,6 +52,7 @@ const AppShell = () => {
           <Route path="/witness" render={() => <Witness />} />
           <Route path="/place" render={() => <Place />} />
           <Route path="/evidence" render={() => <Evidence />} />
+          <Route path="/support" render={() => <Support />} />
           <Route path="/" render={() => <Redirect to="/notifications" />} exact={true} />
         </IonRouterOutlet>
       </IonReactRouter>
