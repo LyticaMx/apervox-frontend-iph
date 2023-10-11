@@ -155,7 +155,7 @@ const Note = () => {
         </div>
       </IonContent>
       <IonFooter className='ion-padding pt-0'>
-        <IonButton className='w-full' disabled={!emergency} color="danger">Solicitar refuerzos</IonButton>
+        <IonButton className='w-full' disabled={!emergency} onClick={() => history.push('support')} color="danger">Solicitar refuerzos</IonButton>
         <IonButton className='w-full' disabled={!emergency} color="warning">Uso de fuerza</IonButton>
         <div className='flex'>
           <IonButton class='w-1/2' expand='block'>Falsa alarma</IonButton>
