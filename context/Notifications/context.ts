@@ -11,6 +11,7 @@ export const initialState: State = {
   },
   data: [],
   notification: undefined,
+  notificationResponse: undefined,
 }
 
 export const NotificationsContext: Context<State> = createContext(initialState)
