@@ -12,6 +12,8 @@ import {
   IonItem,
   IonLabel,
 } from '@ionic/react';
+import clsx from 'clsx';
+import Image from 'next/image';
 import { useHistory } from 'react-router';
 
 const Item = ({ data, onDelete, ...props }) => (
@@ -58,7 +60,13 @@ const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonList>
+        <div className={clsx(['h-full flex flex-col items-center justify-center', { 'hidden' : !!listItems.length }])} >
+          <Image src='/img/empty.png' alt="empty" width={300} height={100}/>
+          <h3 className='font-semibold -mt-5 mb-3'>No se han agregado detenidos</h3>
+          <IonButton size='small' onClick={() => handleClick(undefined)}>Agregar</IonButton>
+          <p></p>
+        </div>
+        <IonList className={clsx({ 'hidden' : !listItems.length })}>
           {listItems.map((item, index) => (
             <Item
               data={item}
