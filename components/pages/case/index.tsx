@@ -2,6 +2,7 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCheckbox,
   IonContent,
   IonFooter,
   IonHeader,
@@ -20,9 +21,11 @@ import TestigosModal from './Witnesses';
 import DetenidosModal from './Arrested';
 import ItemMenu from './ItemMenu';
 import { useCase } from '@/context/Case';
-import { IconAlignBoxLeftTop, IconEye, IconFolder, IconInfoCircle, IconPennant, IconPrison, IconShield } from '@tabler/icons-react';
+import { IconAlignBoxLeftTop, IconClipboardList, IconEye, IconFolder, IconInfoCircle, IconPennant, IconPrison, IconShield } from '@tabler/icons-react';
+import { useHistory } from 'react-router';
 
 const Case = () => {
+  const history = useHistory()
   const [openTestigos, setOpenTestigos] = useState(false);
   const [openDetenidos, setOpenDetenidos] = useState(false);
 
@@ -59,6 +62,14 @@ const Case = () => {
               <IonLabel className="text-sm">Resumen de información recolectada</IonLabel>
             </IonListHeader>
 
+            <IonItem button onClick={(e) => {
+              e.preventDefault()
+              history.push('/summary')
+            }}>
+              <IconClipboardList className='w-5 h-5 ml-2 mr-5' />
+              <IonLabel>Resumen</IonLabel>
+              <IonCheckbox slot="end"></IonCheckbox>
+            </IonItem>
             <IonItem button onClick={() => setOpenDetenidos(true)}>
               <IconShield className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Detenidos</IonLabel>

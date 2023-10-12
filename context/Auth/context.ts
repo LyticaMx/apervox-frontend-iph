@@ -3,7 +3,7 @@ import { Auth, AuthContextType } from 'types/auth'
 
 export const initialState: Auth = {
   isLogguedIn: false,
-  firstResponser_id: '6525c379b85553e90a9896b2',
+  firstResponser_id: '65287e3e59469b7d750cf5dc',
   profile: {
     id: '', 
     firstName: '',

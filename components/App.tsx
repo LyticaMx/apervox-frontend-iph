@@ -19,6 +19,7 @@ import { useAuth } from '@/context/Auth';
 import Home from './pages/home';
 import Cases from './pages/cases';
 import { useLoader } from '@/context/Loader';
+import Summary from './pages/summary';
 
 setupIonicReact({});
 
@@ -54,6 +55,7 @@ const AppShell = () => {
           <Route path="/place" render={() => <Place />} />
           <Route path="/evidence" render={() => <Evidence />} />
           <Route path="/support" render={() => <Support />} />
+          <Route path="/summary" render={() => <Summary />} />
           <Route path="/" render={() => <Home />} exact={true} />
         </IonRouterOutlet>
       </IonReactRouter>
