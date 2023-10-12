@@ -29,18 +29,20 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
   };
 
   const getNotification = async (id: string): Promise<void> => {
-    const res = await client.query({
-      query: GET_NOTIFICATION,
-      variables: {
-        id,
-      },
-    });
-
-    const notification = get(res.data, 'NotificationssWithFilter.edges[0].node');
-
-
-    dispatch(actions.setNotification(notification));
+      const res = await client.query({
+        query: GET_NOTIFICATION,
+        variables: {
+          id,
+        },
+      });
+  
+      const notification = get(res.data, 'NotificationssWithFilter.edges[0].node');
+  
+      if(!notification) return Promise.reject(new Error('No se encontró la notificación'));
+  
+      dispatch(actions.setNotification(notification));
   };
+  
   const changeStatus = async (status?: any) => {
     const { notificationResponse } = state
     

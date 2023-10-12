@@ -21,6 +21,8 @@ import Evidence from './pages/evidence';
 import Support from './pages/support';
 import { useEffect } from 'react';
 import { useAuth } from '@/context/Auth';
+import Home from './pages/home';
+import Cases from './pages/cases';
 
 setupIonicReact({});
 
@@ -46,14 +48,15 @@ const AppShell = () => {
           <Route path="/tabs" render={() => <Tabs />} />
           <Route path="/notifications" render={() => <Notifications />} />
           <Route path="/notification" render={() => <Notification />} />
-          <Route path="/nota-rapida" render={() => <Note />} />
           <Route path="/case" render={() => <Case />} />
+          <Route path="/cases" render={() => <Cases />} />
+          <Route path="/nota-rapida" render={() => <Note />} />
           <Route path="/arrested" render={() => <Arrested />} />
           <Route path="/witness" render={() => <Witness />} />
           <Route path="/place" render={() => <Place />} />
           <Route path="/evidence" render={() => <Evidence />} />
           <Route path="/support" render={() => <Support />} />
-          <Route path="/" render={() => <Redirect to="/notifications" />} exact={true} />
+          <Route path="/" render={() => <Home />} exact={true} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

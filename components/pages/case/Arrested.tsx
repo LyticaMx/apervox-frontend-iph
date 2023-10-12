@@ -1,4 +1,4 @@
-import { useCases } from '@/context/Cases';
+import { useCase } from '@/context/Case';
 import { useConfirm } from '@/hooks/useConfirm';
 import {
   IonModal,
@@ -35,7 +35,7 @@ const Item = ({ data, onDelete, ...props }) => (
 const DetenidosModal = ({ open, onDidDismiss, listItems }) => {
   const history = useHistory();
   const confirm = useConfirm();
-  const { actions } = useCases();
+  const { actions } = useCase();
 
   const handleClick = item => {
     onDidDismiss();

@@ -26,7 +26,7 @@ const Notification = () => {
 
   useWillMount(() => {
     if (!notification) {
-      history.push('/notificaciones');
+      history.goBack();
     }
   });
   const position: LatLngExpression = [notification?.latitude ?? 0, notification?.longitude ?? 0];

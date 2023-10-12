@@ -11,11 +11,11 @@ import {
 } from '@ionic/react';
 import { useHistory, useLocation } from 'react-router';
 import { useRef } from 'react';
-import { useCases } from '@/context/Cases';
+import { useCase } from '@/context/Case';
 
 const Witness = () => {
   const history = useHistory();
-  const { actions } = useCases();
+  const { actions } = useCase();
   const formikRef = useRef(null);
   const { state } = useLocation();
 

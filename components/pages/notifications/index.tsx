@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { IonContent, IonFooter, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useNotifications } from '@/context/Notifications';
 import { useHistory } from 'react-router';
 
@@ -8,8 +8,12 @@ function Notifications() {
   const history = useHistory()
 
   const handleClick = async (id) => {
-    await actions.getNotification(id)
-    history.push('/notification')
+    try {
+      await actions.getNotification(id)
+      history.push('/notification')
+    } catch (error) {
+      
+    }
   }
 
   useEffect(() => { actions.getData() }, [])
@@ -18,6 +22,9 @@ function Notifications() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton default-href="/"></IonBackButton>
+          </IonButtons>
           <IonTitle>Notificaciones</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -38,7 +45,6 @@ function Notifications() {
         </IonList>
         <IonInfiniteScroll
             onIonInfinite={(ev) => {
-              console.log('ENTRAMOS?')
             actions.getData({cursor: pagination.endCursor});
             setTimeout(() => ev.target.complete(), 500);
             }}

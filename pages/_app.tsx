@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from '../apollo-client';
 import { AuthProvider } from '@/context/Auth';
 import { NotificationsProvider } from '@/context/Notifications';
-import { CasesProvider } from '@/context/Cases';
+import { CaseProvider } from '@/context/Case';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -25,6 +25,7 @@ import '@ionic/react/css/display.css';
 
 import '../styles/global.css';
 import '../styles/variables.css';
+import { CasesProvider } from '@/context/Cases';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -39,9 +40,11 @@ function MyApp({ Component, pageProps }) {
       <ApolloProvider client={client}>
         <AuthProvider>
           <NotificationsProvider>
-            <CasesProvider>
-              <Component {...pageProps} />
-            </CasesProvider>
+            <CaseProvider>
+              <CasesProvider>
+                <Component {...pageProps} />
+              </CasesProvider>
+            </CaseProvider>
           </NotificationsProvider>
         </AuthProvider>
       </ApolloProvider>

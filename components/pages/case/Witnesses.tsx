@@ -12,7 +12,7 @@ import {
   IonLabel,
 } from '@ionic/react';
 import { useHistory } from 'react-router';
-import { useCases } from '@/context/Cases';
+import { useCase } from '@/context/Case';
 
 const Item = ({ data, onDelete, ...props }) => (
   <IonItem {...props}>
@@ -35,7 +35,7 @@ const Item = ({ data, onDelete, ...props }) => (
 const TestigosModal = ({ open, onDidDismiss, listItems }) => {
   const history = useHistory();
   const confirm = useConfirm();
-  const { actions } = useCases();
+  const { actions } = useCase();
 
   const handleClick = witness => {
     onDidDismiss();
