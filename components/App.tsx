@@ -1,14 +1,9 @@
-import { IonApp, IonLabel, IonRouterOutlet, setupIonicReact, IonTabs, IonTabBar, IonTabButton, IonIcon  } from '@ionic/react';
-import { cog, flash, list } from 'ionicons/icons';
+import { IonApp, IonRouterOutlet, setupIonicReact, IonLoading  } from '@ionic/react';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import Feed from './pages/Feed';
-import Lists from './pages/Lists';
-import ListDetail from './pages/ListDetail';
-import Settings from './pages/Settings';
 import Tabs from './pages/Tabs';
 import Notifications from './pages/notifications';
 import Notification from './pages/notification';
@@ -23,6 +18,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/Auth';
 import Home from './pages/home';
 import Cases from './pages/cases';
+import { useLoader } from '@/context/Loader';
 
 setupIonicReact({});
 
@@ -36,6 +32,7 @@ window.matchMedia("(prefers-color-scheme: dark)").addListener(async (status) => 
 
 const AppShell = () => {
   const {actions} = useAuth()
+  const {show} = useLoader()
 
   useEffect(() => {
     actions.signIn()
@@ -43,6 +40,7 @@ const AppShell = () => {
 
   return (
     <IonApp>
+      <IonLoading isOpen={show} />
       <IonReactRouter>
         <IonRouterOutlet id="main">
           <Route path="/tabs" render={() => <Tabs />} />

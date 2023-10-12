@@ -1,5 +1,7 @@
 import {
+  IonBackButton,
   IonButton,
+  IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
@@ -35,6 +37,9 @@ const Case = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton default-href="/cases"></IonBackButton>
+          </IonButtons>
           <IonTitle>Caso</IonTitle>
         </IonToolbar>
       </IonHeader>

@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import '../styles/global.css';
 import '../styles/variables.css';
 import { CasesProvider } from '@/context/Cases';
+import { LoaderProvider } from '@/context/Loader/LoaderProvider';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -38,15 +39,17 @@ function MyApp({ Component, pageProps }) {
         <meta name="color-scheme" content="light" />
       </Head>
       <ApolloProvider client={client}>
-        <AuthProvider>
-          <NotificationsProvider>
-            <CaseProvider>
-              <CasesProvider>
-                <Component {...pageProps} />
-              </CasesProvider>
-            </CaseProvider>
-          </NotificationsProvider>
-        </AuthProvider>
+        <LoaderProvider>
+          <AuthProvider>
+            <NotificationsProvider>
+              <CaseProvider>
+                <CasesProvider>
+                  <Component {...pageProps} />
+                </CasesProvider>
+              </CaseProvider>
+            </NotificationsProvider>
+          </AuthProvider>
+        </LoaderProvider>
       </ApolloProvider>
       <Script
         type="module"

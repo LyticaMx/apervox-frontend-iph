@@ -12,6 +12,11 @@ query MyQuery($id: String!) {
         notification {
           title
         }
+        summary {
+          injuries
+          riskLevel
+          casualties
+        }
         notes {
           text
           id
@@ -22,11 +27,6 @@ query MyQuery($id: String!) {
 }
 `
 
-// summary {
-//   injuries
-//   riskLevel
-//   casualties
-// }
 
 export const GET_WITNESS = gql`
   query MyQuery($id: String!) {
