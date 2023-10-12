@@ -1,26 +1,42 @@
-import { ReactElement, ReactNode, Reducer, useMemo, useReducer } from 'react';
-import { CasesContext, initialState } from './context';
-import { useActions } from './actions';
-import { ContextType, State } from './types';
-import { reducer } from './reducer';
-import { Types } from './constants';
-import { Action } from 'types/contextReducer';
+import { useState, useMemo, ReactNode, ReactElement, useCallback } from 'react'
+import { CasesContext, initialState } from './context'
+import { useApolloClient } from '@apollo/client'
+import { GET_CASES } from './queries.graphql'
+import { get } from 'lodash'
+import { ContextType, GetDataPayload, State } from './types'
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
-const CasesProvider = (props: Props): ReactElement => {
-  const { children } = props;
-  const [state, dispatch] = useReducer<Reducer<State, Action<Types>>>(reducer, initialState);
-  const actions = useActions(state, dispatch);
+const CasesProvider = ({ children }: Props): ReactElement => {
+  const client = useApolloClient();
+  const [state, setState] = useState<State>(initialState)
 
-  const contextValue = useMemo<ContextType>(() => Object.assign({}, state, { actions }), [
-    state,
-    actions,
-  ]);
+  const getData = useCallback(async (params?: GetDataPayload): Promise<void> => {
+    const first = get(params, 'first', state.pagination.first);
+    const cursor = get(params, 'cursor', state.pagination.endCursor);
 
-  return <CasesContext.Provider value={contextValue}>{children}</CasesContext.Provider>;
-};
+    const res = await client.query({ query: GET_CASES, variables: { first, cursor } });
+    const { edges, pageInfo } = res.data.cases;
 
-export { CasesProvider };
+    setState(prev => ({
+      data: [...prev.data, ...edges.map(item => item.node)],
+      pagination: {
+        first,
+        ...pageInfo
+      }
+    }))
+  }, [])
+
+  const contextValue = useMemo<ContextType>(
+    () => Object.assign({}, state, { actions: { getData } }),
+    [state, getData]
+  )
+
+  return (
+    <CasesContext.Provider value={contextValue}>{children}</CasesContext.Provider>
+  )
+}
+
+export { CasesProvider }

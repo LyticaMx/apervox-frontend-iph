@@ -1,10 +1,15 @@
-import { Context, createContext } from 'react';
-import { State } from './types';
+import { createContext, Context } from 'react'
+import { ContextType, State } from './types'
 
 export const initialState: State = {
-  witnessList: [],
-  arrestedsList: [],
-  caseId: '651f95704cf18e2f0983dd44',
-};
+  pagination: {
+    first: 20,
+    endCursor: null,
+    startCursor: null,
+    hasNextPage: false,
+    hasPreviousPage: false
+  },
+  data: []
+}
 
-export const CasesContext: Context<State> = createContext(initialState);
+export const CasesContext: Context<ContextType> = createContext(initialState)

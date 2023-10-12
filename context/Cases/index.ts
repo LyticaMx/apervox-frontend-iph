@@ -1,2 +1,2 @@
-export * from './Provider';
-export * from './useCases';
+export * from './useCases'
+export * from './Provider'
