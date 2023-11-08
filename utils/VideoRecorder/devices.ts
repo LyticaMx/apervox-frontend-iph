@@ -53,8 +53,8 @@ async function byType(devices: MediaDeviceInfo[]): Promise<ByType> {
 
 async function getUserPermission(): Promise<MediaDeviceInfo[]> {
   try {
+    console.log('ENTRAMOS?')
     const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
       video: true,
     });
     const mediaDevices = await navigator.mediaDevices.enumerateDevices();
@@ -63,6 +63,7 @@ async function getUserPermission(): Promise<MediaDeviceInfo[]> {
     });
     return mediaDevices;
   } catch (error) {
+    console.log("🚀 ~ file: devices.ts:66 ~ getUserPermission ~ error:", error)
     throw new Error('getUserPermission');
   }
 }

@@ -37,51 +37,50 @@ export const useVideoRecord = ({ path }: RecorderConfig) => {
     else start()
   }
   const start = async () => {
-    console.log("🚀 ~ START", {devicesById, devicesByType})
     if(isRecording) return 
 
-    // try {
-    //   const newrecording = await createRecording();
-    //   if (!newrecording) return;
+    try {
+      const newrecording = await createRecording();
+      if (!newrecording) return;
 
-    //   setIsRecording(true)
-    //   setRecording(newrecording)
+      setIsRecording(true)
+      setRecording(newrecording)
       
-    //   await openCamera(newrecording.id);
-    //   await startRecording(newrecording.id);
+      await openCamera(newrecording.id);
+      await startRecording(newrecording.id);
       
-    // } catch (error) {
-    //   console.error({ error });
-    // }
+    } catch (error) {
+      console.error({ error });
+    }
   }
 
   const stop = async () => {
     if(!isRecording) return 
 
-    // const res = await stopRecording(recording.id);
+    const res = await stopRecording(recording.id);
 
-    // if(res.objectBase64) {
-    //     try {
-    //       const fileName = new Date().getTime() + '.mp4'
+    if(res.objectBase64) {
+        try {
+          const fileName = new Date().getTime() + '.mp4'
 
-    //       await Filesystem.writeFile({
-    //         path: `${path}/${fileName}`,
-    //         directory: Directory.Data,
-    //         data: res.objectBase64,
-    //         recursive: true
-    //       })
+          await Filesystem.writeFile({
+            path: `${path}/${fileName}`,
+            directory: Directory.Data,
+            data: res.objectBase64,
+            recursive: true
+          })
     
-    //       loadFiles()
-    //     } catch (error) {
-    //       console.log("🚀 ~ error:", error)
+          loadFiles()
+        } catch (error) {
+          console.log("🚀 ~ error:", error)
           
-    //     }
-    // }
+        }
+    }
 
-    // await closeCamera(recording.id);
-    // setIsRecording(false)
-    // setRecording(null)
-    // clearAllRecordings()
+    await closeCamera(recording.id);
+    setIsRecording(false)
+    setRecording(null)
+    clearAllRecordings()
   }
 
   const play = async () => {

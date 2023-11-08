@@ -6,9 +6,7 @@ export async function startStream(
   const newStream = await navigator.mediaDevices.getUserMedia({
     video: { 
       facingMode: { exact: "environment" },
-      deviceId: { exact: videoId } },
-    audio: {
-      deviceId: { exact: audioId },
+      // deviceId: { exact: videoId } 
     },
   });
   const tracks = newStream.getTracks();
