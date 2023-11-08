@@ -1,12 +1,10 @@
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonCheckbox,
   IonContent,
   IonFooter,
   IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -15,47 +13,47 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-} from '@ionic/react';
-import { useEffect, useState } from 'react';
-import TestigosModal from './Witnesses';
-import DetenidosModal from './Arrested';
-import ItemMenu from './ItemMenu';
-import { useCase } from '@/context/Case';
-import { IconAlignBoxLeftTop, IconClipboardList, IconEye, IconFolder, IconInfoCircle, IconPennant, IconPrison, IconShield } from '@tabler/icons-react';
-import { useHistory } from 'react-router';
+} from '@ionic/react'
+import { useEffect, useState } from 'react'
+import ItemMenu from './ItemMenu'
+import { useCase } from '@/context/Case'
+import { IconAlignBoxLeftTop, IconClipboardList, IconEye, IconPennant, IconShield, IconUserExclamation } from '@tabler/icons-react'
+import { useHistory } from 'react-router'
+import CaseDescription from '@/components/misc/CaseDescription'
+import BackButton from '@/components/misc/BackButton'
+import ProfilesModal, { Types } from './ProfilesModal'
 
 const Case = () => {
   const history = useHistory()
-  const [openTestigos, setOpenTestigos] = useState(false);
-  const [openDetenidos, setOpenDetenidos] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [type, setType] = useState<Types>('arrested')
 
-  const { actions, case: data, witnessList, arrestedsList } = useCase();
+  const { actions, case: data, witnessList, arrestedsList, casualties } = useCase()
+
+  const handleOpen = (value: Types) => {
+    setType(value)
+    setOpen(true)
+  }
 
   useEffect(() => {
-    actions.getWitness();
-    actions.getArrested();
-  }, []);
+    actions.getWitness()
+    actions.getArrested()
+    actions.getCasualties()
+  }, [])
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton default-href="/cases"></IonBackButton>
+            <BackButton to="/cases"/>
           </IonButtons>
           <IonTitle>Caso</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
         <div className="flex flex-col h-full gap-2.5">
-          <div className="flex items-center text-sm gap-3">
-            <IconInfoCircle className="w-5 h-5"/>
-            <span>{data?.notification.title}</span>
-          </div>
-          <div className="flex items-center text-sm gap-3">
-            <IconFolder className="w-5 h-5" />
-            <span>{data?.folio}</span>
-          </div>
+          <CaseDescription />
 
           <IonList>
             <IonListHeader>
@@ -68,17 +66,22 @@ const Case = () => {
             }}>
               <IconClipboardList className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Resumen</IonLabel>
-              <IonCheckbox slot="end"></IonCheckbox>
+              <IonCheckbox slot="end" checked={!!data?.summary}></IonCheckbox>
             </IonItem>
-            <IonItem button onClick={() => setOpenDetenidos(true)}>
+            <IonItem button onClick={() => handleOpen('arrested')}>
               <IconShield className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Detenidos</IonLabel>
               <IonNote slot="end">{arrestedsList.length}</IonNote>
             </IonItem>
-            <IonItem button onClick={() => setOpenTestigos(true)}>
+            <IonItem button onClick={() => handleOpen('witness')}>
               <IconEye className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Testigos</IonLabel>
               <IonNote slot="end">{witnessList.length}</IonNote>
+            </IonItem>
+            <IonItem button onClick={() => handleOpen('casualties')}>
+              <IconUserExclamation className='w-5 h-5 ml-2 mr-5' />
+              <IonLabel>Damnificados</IonLabel>
+              <IonNote slot="end">{casualties.length}</IonNote>
             </IonItem>
             <IonItem button>
               <IconPennant className='w-5 h-5 ml-2 mr-5' />
@@ -99,6 +102,11 @@ const Case = () => {
               <ItemMenu label="Testigo" to="/witness" icon={<IconEye className='w-5 h-5' />} />
             </div>
             <div className="grow basis-full">
+              <ItemMenu label="Damnificado" to="/casualties" icon={<IconUserExclamation className='w-5 h-5' />} />
+            </div>
+          </div>
+          <div className="flex">
+          <div className="grow basis-full">
               <ItemMenu label="Sitio" to="/place" icon={<IconPennant className='w-5 h-5' />} />
             </div>
             <div className="grow basis-full">
@@ -106,24 +114,15 @@ const Case = () => {
             </div>
           </div>
         </div>
+        
+        <ProfilesModal type={type} open={open} onDidDismiss={() => setOpen(false)}/>
 
-        <TestigosModal
-          open={openTestigos}
-          onDidDismiss={() => setOpenTestigos(false)}
-          listItems={witnessList}
-        />
-        <DetenidosModal
-          open={openDetenidos}
-          onDidDismiss={() => setOpenDetenidos(false)}
-          listItems={arrestedsList}
-        />
-        {/* <Confirm open={true} message="?"/> */}
       </IonContent>
-      <IonFooter className="ion-padding pt-0">
+      <IonFooter className="ion-padding">
         <IonButton expand="block">Enviar información</IonButton>
       </IonFooter>
     </IonPage>
-  );
-};
+  )
+}
 
-export default Case;
+export default Case

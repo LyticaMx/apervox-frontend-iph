@@ -10,6 +10,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonModal,
   IonNote,
   IonPage,
   IonSelect,
@@ -18,65 +19,44 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { useCase } from '@/context/Case';
-import { IconBrandZoom, IconCamera, IconFolder, IconInfoCircle } from '@tabler/icons-react';
+import { IconBrandZoom, IconCamera } from '@tabler/icons-react';
 import { useHistory } from 'react-router';
 import TabButton from '@/components/misc/TabButton';
 import { IconMicrophone } from '@tabler/icons-react';
+import * as yup from 'yup'
+import { useFormik } from 'formik';
+import { pick } from 'lodash'
+import CaseDescription from '@/components/misc/CaseDescription';
+import { useEffect, useMemo, useRef } from 'react';
+import Form from './form';
+import BackButton from '@/components/misc/BackButton';
+import { useRecord } from '@/hooks/useRecord';
+import { useVideoRecord } from '@/hooks/useVideoRecord';
+
 
 const Summary = () => {
-  const history = useHistory()
-  const { actions, case: data, witnessList, arrestedsList } = useCase();
+  const { case: caseData } = useCase()
+  const ref = useRef(null);
+  const path = useMemo(() => `${caseData?.folio}/summary/audios`, [caseData])
+  const pathVideos = useMemo(() => `${caseData?.folio}/summary/videos`, [caseData])
+  const { files, RecordButton } = useRecord({ path })
+  const { files: filesVideos, RecordButton: RecordButtonVideo, RecordModal } = useVideoRecord({ path: pathVideos })
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton default-href="/cases"></IonBackButton>
+            <BackButton to="/case"/>
           </IonButtons>
           <IonTitle>Documentación de sitio</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
         <div className="flex flex-col h-full gap-2.5">
-          <div className="flex items-center text-sm gap-3">
-            <IconInfoCircle className="w-5 h-5"/>
-            <span>{data?.notification.title}</span>
-          </div>
-          <div className="flex items-center text-sm gap-3">
-            <IconFolder className="w-5 h-5" />
-            <span>{data?.folio}</span>
-          </div>
+          <CaseDescription />
 
-          {/* FORMULARIO */}
-          <div className='my-10'>
-            <div className='w-1/2 inline-block px-5'>
-              <IonSelect label="Tipo de delito" labelPlacement="floating">
-                <IonSelectOption value="">No Game Console</IonSelectOption>
-                <IonSelectOption value="nes">NES</IonSelectOption>
-                <IonSelectOption value="n64">Nintendo64</IonSelectOption>
-                <IonSelectOption value="ps">PlayStation</IonSelectOption>
-                <IonSelectOption value="genesis">Sega Genesis</IonSelectOption>
-                <IonSelectOption value="saturn">Sega Saturn</IonSelectOption>
-                <IonSelectOption value="snes">SNES</IonSelectOption>
-              </IonSelect>
-            </div>
-            <div className='w-1/2 inline-block px-5'>
-              <IonSelect label="Nivel de riesgo" labelPlacement="floating">
-                <IonSelectOption value="LOW">Bajo</IonSelectOption>
-                <IonSelectOption value="MEDIUM">Medio</IonSelectOption>
-                <IonSelectOption value="HIGH">Alto</IonSelectOption>
-                <IonSelectOption value="VERY_HIGH">Muy alto</IonSelectOption>
-              </IonSelect>
-            </div>
-            <div className='w-1/2 inline-block px-5 mt-5'>
-              <IonInput label="Heridos" type="number" placeholder="0" labelPlacement="floating"></IonInput>
-            </div>
-            <div className='w-1/2 inline-block px-5 mt-5'>
-              <IonInput label="Muertos" type="number" placeholder="0" labelPlacement="floating"></IonInput>
-            </div>
-          </div>
-
+          <Form formikRef={ref}/>
 
           <IonList>
             <IonListHeader>
@@ -86,12 +66,12 @@ const Summary = () => {
             <IonItem button>
               <IconMicrophone className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Audios</IonLabel>
-              <IonNote slot="end">2</IonNote>
+              <IonNote slot="end">{files.length}</IonNote>
             </IonItem>
             <IonItem button>
               <IconBrandZoom className='w-5 h-5 ml-2 mr-5' />
               <IonLabel>Videos</IonLabel>
-              <IonNote slot="end">0</IonNote>
+              <IonNote slot="end">{filesVideos.length}</IonNote>
             </IonItem>
             <IonItem button>
               <IconCamera className='w-5 h-5 ml-2 mr-5' />
@@ -100,22 +80,24 @@ const Summary = () => {
             </IonItem>
           </IonList>
 
-          <IonButton className='mt-auto'>Continuar documentación</IonButton>
+          <div className="flex mt-auto">
+            <div className="grow basis-full">
+              <RecordButton />
+            </div>
+            <div className="grow basis-full">
+              <RecordButtonVideo />
+              <RecordModal />
+            </div>
+            <div className="grow basis-full">
+              <TabButton label="Fotos" icon={<IconCamera className='w-5 h-5' />} />
+            </div>
+          </div>
         </div>
-
       </IonContent>
       <IonFooter className="ion-padding">
-        <div className="flex mt-auto">
-          <div className="grow basis-full">
-            <TabButton label="Audio" icon={<IconMicrophone className='w-5 h-5' />} />
-          </div>
-          <div className="grow basis-full">
-            <TabButton label="Video" icon={<IconBrandZoom className='w-5 h-5' />} />
-          </div>
-          <div className="grow basis-full">
-            <TabButton label="Fotos" icon={<IconCamera className='w-5 h-5' />} />
-          </div>
-        </div>
+        <IonButton expand="block" disabled={!ref.current?.isValid} onClick={ref.current?.submitForm}>
+            Guardar documentación
+          </IonButton>
       </IonFooter>
     </IonPage>
   );

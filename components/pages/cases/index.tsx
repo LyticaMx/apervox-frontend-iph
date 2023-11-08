@@ -3,6 +3,7 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonInfiniteScroll, Io
 import { useHistory } from 'react-router';
 import { useCases } from '@/context/Cases';
 import { useCase } from '@/context/Case';
+import BackButton from '@/components/misc/BackButton';
 
 function Cases() {
   const { data, pagination, actions } = useCases()
@@ -12,8 +13,13 @@ function Cases() {
 
   const handleClick = async (id) => {
     try {
-      await caseActions.getCase(id)
-      history.push('/case')
+      const res = await caseActions.getCase(id)
+      let route = '/case'
+
+      if(res.notes) route = '/notes'
+      else if(!res.summary) route = '/summary'
+
+      history.push(route)
     } catch (error) {
       
     }
@@ -26,7 +32,7 @@ function Cases() {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton default-href="/"></IonBackButton>
+            <BackButton to="/" />
           </IonButtons>
           <IonTitle>Casos</IonTitle>
         </IonToolbar>
