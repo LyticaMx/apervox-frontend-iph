@@ -41,13 +41,13 @@ function MyApp({ Component, pageProps }) {
       <ApolloProvider client={client}>
         <LoaderProvider>
           <AuthProvider>
-            <NotificationsProvider>
-              <CaseProvider>
-                <CasesProvider>
-                  <Component {...pageProps} />
-                </CasesProvider>
-              </CaseProvider>
-            </NotificationsProvider>
+            <CaseProvider>
+              <NotificationsProvider>
+              <CasesProvider>
+                <Component {...pageProps} />
+              </CasesProvider>
+              </NotificationsProvider>
+            </CaseProvider>
           </AuthProvider>
         </LoaderProvider>
       </ApolloProvider>

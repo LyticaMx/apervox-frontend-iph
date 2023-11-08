@@ -203,6 +203,7 @@ body {
   box-shadow: 0px 0px 5px 5px #0099e0;
 }
 
+/* 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -220,7 +221,7 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: none
-}
+} */
 
 @media (prefers-color-scheme: light) {
   :root {

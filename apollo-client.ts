@@ -1,5 +1,11 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { relayStylePagination } from "@apollo/client/utilities";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+if (process.env.NODE_ENV == "development") {  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 const cache = new InMemoryCache({
   typePolicies: {

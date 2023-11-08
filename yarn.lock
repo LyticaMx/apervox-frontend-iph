@@ -44,7 +44,7 @@
 
 "@babel/runtime@7.11.2":
   version "7.11.2"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.11.2.tgz"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
   dependencies:
     regenerator-runtime "^0.13.4"
@@ -931,7 +931,7 @@ caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.300014
 
 capacitor-voice-recorder@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/capacitor-voice-recorder/-/capacitor-voice-recorder-5.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-5.0.0.tgz#ec8e421283de19063461838fd340d91f352c8875"
   integrity sha512-rCZgbmdmj9eXlotziRnIXWoo+7/aGKM1dSeSrgaEmayu9aTs8xkwhpx9eeVe24VDC6sfMHTnwMl5311Ryr/yFA==
   dependencies:
     get-blob-duration "^1.2.0"
@@ -1682,7 +1682,7 @@ functions-have-names@^1.2.2:
 
 get-blob-duration@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/get-blob-duration/-/get-blob-duration-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/get-blob-duration/-/get-blob-duration-1.2.0.tgz#73cf7dac2fbaa219a5a03d5e5093e06e43814d49"
   integrity sha512-2xNJa+oKznR21eC2ThMzw4a1931a3ogA8aHoY92xruZufc/02G7pl/P793GJZytkyI8xMJ2DepEQ7MWvg/tn/Q==
   dependencies:
     "@babel/runtime" "7.11.2"
@@ -2873,7 +2873,7 @@ readdirp@~3.6.0:
 
 regenerator-runtime@^0.13.11, regenerator-runtime@^0.13.3, regenerator-runtime@^0.13.4:
   version "0.13.11"
-  resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regexp.prototype.flags@^1.4.3:

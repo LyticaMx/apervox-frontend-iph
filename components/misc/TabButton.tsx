@@ -1,14 +1,16 @@
 import { IonIcon, IonLabel, IonRippleEffect } from "@ionic/react"
+import clsx from "clsx"
 import { ReactNode, useCallback } from "react"
 import { useHistory } from "react-router"
 
 interface Props {
-  label: string
+  label?: string
   onClick?: (e?: any) => void
   to?: string
   icon: ReactNode
+  className?: string
 }
-const TabButton = ({label, icon, to, onClick}: Props) => {
+const TabButton = ({label, icon, to, onClick, className}: Props) => {
   const history = useHistory()
   
   const handleClick = useCallback((e) => {
@@ -17,9 +19,9 @@ const TabButton = ({label, icon, to, onClick}: Props) => {
   }, [to, onClick, history])
 
   return (
-    <div onClick={handleClick} className="flex flex-col items-center gap-2 p-3 ion-activatable overflow-hidden relative select-none rounded-md">
+    <div onClick={handleClick} className={clsx("flex flex-col items-center gap-2 p-3 ion-activatable overflow-hidden relative select-none rounded-md", className)}>
       {icon}
-      <IonLabel>{label}</IonLabel>
+      {label ? <IonLabel>{label}</IonLabel> : null}
       <IonRippleEffect/>
     </div>
   )

@@ -7,7 +7,7 @@ import { Route } from 'react-router-dom';
 import Tabs from './pages/Tabs';
 import Notifications from './pages/notifications';
 import Notification from './pages/notification';
-import Note from './pages/note';
+import Notes from './pages/notes';
 import Case from './pages/case';
 import Arrested from './pages/arrested';
 import Witness from './pages/witness';
@@ -20,6 +20,7 @@ import Home from './pages/home';
 import Cases from './pages/cases';
 import { useLoader } from '@/context/Loader';
 import Summary from './pages/summary';
+import Casualties from './pages/casualties';
 
 setupIonicReact({});
 
@@ -49,9 +50,10 @@ const AppShell = () => {
           <Route path="/notification" render={() => <Notification />} />
           <Route path="/case" render={() => <Case />} />
           <Route path="/cases" render={() => <Cases />} />
-          <Route path="/nota-rapida" render={() => <Note />} />
+          <Route path="/notes" render={() => <Notes />} />
           <Route path="/arrested" render={() => <Arrested />} />
           <Route path="/witness" render={() => <Witness />} />
+          <Route path="/casualties" render={() => <Casualties />} />
           <Route path="/place" render={() => <Place />} />
           <Route path="/evidence" render={() => <Evidence />} />
           <Route path="/support" render={() => <Support />} />
