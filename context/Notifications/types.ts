@@ -6,15 +6,14 @@ export interface Notification {
   latitude: number
   longitude: number
   description: String
-  responses: Array<{ id }> | null
+  responses: Array<Partial<NotificationResponse>> | null
 }
 
 export interface NotificationResponse {
-  mongoId: string
-  createdAt: string
+  id: string
+  firstResponser_id: string
   status: string 
   stopTime: string 
-  updatedAt: string
 }
 
 export interface State {
@@ -33,7 +32,7 @@ export interface GetDataPayload {
 export interface Actions {
   getData: (params?: GetDataPayload) => Promise<void>
   getNotification: (id: string) => Promise<void>
-  changeStatus: () => Promise<void>
+  changeStatus: (status?: string) => Promise<void>
 }
 
 export interface ContextType extends State {

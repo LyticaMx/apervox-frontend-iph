@@ -7,9 +7,16 @@ import { Types, actions } from './constants';
 import { CREATE_NOTIFICATION_RESPONSE, GET_NOTIFICATION, GET_NOTIFICATIONS, UPDATE_NOTIFICATION_RESPONSE } from './queries.graphql';
 import { get } from 'lodash';
 import { useAuth } from '../Auth';
+import { useLoader } from '../Loader';
+import { useCase } from '../Case';
+import { useHistory } from 'react-router';
 
 export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Actions => {
   const client = useApolloClient();
+  const history = useHistory()
+  const {actions: loaderActions } = useLoader()
+  const { actions: caseActions } = useCase()
+
   const { auth } = useAuth()
 
   const getData = async (params: GetDataPayload): Promise<void> => {
@@ -31,6 +38,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
   const getNotification = async (id: string): Promise<void> => {
       const res = await client.query({
         query: GET_NOTIFICATION,
+        fetchPolicy: "no-cache",
         variables: {
           id,
         },
@@ -40,34 +48,57 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
   
       if(!notification) return Promise.reject(new Error('No se encontró la notificación'));
   
+      // TODO : HACER FILTRO POR FIRSTRESPONSER
+      dispatch(actions.setResponse(get(notification, 'responses[0]', undefined)))
+      
       dispatch(actions.setNotification(notification));
   };
   
-  const changeStatus = async (status?: any) => {
-    const { notificationResponse } = state
+  const changeStatus = async (status?: any) => { 
     
-    if( notificationResponse ){
-      const res = await client.query({
-        query: UPDATE_NOTIFICATION_RESPONSE,
-        variables: {
-          id: notificationResponse.mongoId,
+    try {
+      loaderActions.show()
+      const { notificationResponse } = state
+      
+      if( notificationResponse ){
+        const res = await client.mutate({
+          mutation: UPDATE_NOTIFICATION_RESPONSE,
+          variables: {
+            id: notificationResponse.id,
+            status
+          },
+        });
+  
+        const { notification } = res.data.updateNotificationResponse;
+        dispatch(actions.setResponse({ 
+          ...notificationResponse,
           status
-        },
-      });
-
-      console.log('UPDATE', res)
-    }
-    else {
-      const res = await client.query({
-        query: CREATE_NOTIFICATION_RESPONSE,
-        variables: {
-          notificationId: state.notification.mongoId,
-          firstresponserId: auth.firstResponser_id,
-          status
-        },
-      });
-
-      console.log('CREATE', res)
+        }))
+  
+        if(status === 'RESOLVED' && notification.case){
+          await caseActions.getCase(notification.case.id)
+        }
+      }
+      else {
+        const res = await client.mutate({
+          mutation: CREATE_NOTIFICATION_RESPONSE,
+          variables: {
+            notificationId: state.notification.mongoId,
+            firstresponserId: auth.firstResponser_id,
+            status
+          },
+        });
+  
+        dispatch(actions.setResponse({
+          ...res.data.addNotificationResponse,
+          id: res.data.addNotificationResponse.mongoId
+        }))
+      }
+  
+      loaderActions.hide() 
+    } catch (error) {
+      console.log("🚀 ~ file: actions.ts:103 ~ changeStatus ~ error:", error)
+      loaderActions.hide()
     }
   };
 

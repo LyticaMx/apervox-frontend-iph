@@ -1,41 +1,45 @@
 import { Dispatch } from 'react';
 import { get } from 'lodash';
-import { useApolloClient } from '@apollo/client';
+import { gql, useApolloClient } from '@apollo/client';
 import { Action } from '@/types/contextReducer';
 
-import { Actions, State } from './types';
+import { Actions, State, SummaryForm } from './types';
 import { Types, actions } from './constants';
-import {
-  ADD_ARRESTED,
-  GET_WITNESS,
-  UPDATE_ARRESTED,
-  ADD_WITNESS,
-  GET_ARRESTED,
-  UPDATE_WITNESS,
-  DELETE_WITNESS,
-  DELETE_ARRESTED,
-  GET_CASE,
-} from './queries.graphql';
 
-const firstResponserId = '651f8e65aa4107d1f4096484';
+import { GET_CASE, GET_CRIMES, CREATE_SUMMARY, UPDATE_SUMMARY, ADD_SUPPORTS, } from './queries/case.graphql';
+import { ADD_CASUALTY, DELETE_CASUALTY, GET_CASUALTIES, UPDATE_CASUALTY } from './queries/causalties.graphql';
+import { ADD_ARRESTED, UPDATE_ARRESTED, GET_ARRESTED, DELETE_ARRESTED, } from './queries/arrested.graphql'
+import { ADD_WITNESS, UPDATE_WITNESS, GET_WITNESS, DELETE_WITNESS, } from './queries/witness.graphql'
+import { useLoader } from '../Loader';
+import { useAuth } from '../Auth';
 
 export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Actions => {
   const client = useApolloClient();
+  const { auth } = useAuth()
+  const { actions: loaderActions } = useLoader()
 
   const getCase = async (id: string) => {
+    try {
+      loaderActions.show()
+      const res = await client.query({
+        query: GET_CASE,
+        variables: {
+          id,
+        },
+      });
+  
+      const itemCase = get(res.data, 'CasesWithFilter.edges[0].node');
+  
+      if(!itemCase) return Promise.reject(new Error('No se encontró el caso'));
+  
+      dispatch(actions.setCase(itemCase));
+      
+      loaderActions.hide()
 
-    const res = await client.query({
-      query: GET_CASE,
-      variables: {
-        id,
-      },
-    });
-
-    const itemCase = get(res.data, 'CasesWithFilter.edges[0].node');
-
-    if(!itemCase) return Promise.reject(new Error('No se encontró el caso'));
-
-    dispatch(actions.setCase(itemCase));
+      return itemCase
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 
   const getArrested = async () => {
@@ -71,7 +75,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       variables: {
         ...values,
         caseId: state.caseId,
-        firstResponserId,
+        firstResponserId: auth.firstResponser_id,
       },
     });
     const newWitness = {
@@ -89,7 +93,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       variables: {
         ...values,
         caseId: state.caseId,
-        firstResponserId,
+        firstResponserId: auth.firstResponser_id,
       },
     });
     const { updateWitness } = res.data;
@@ -120,7 +124,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       variables: {
         ...values,
         caseId: state.caseId,
-        firstResponserId,
+        firstResponserId: auth.firstResponser_id,
       },
     });
 
@@ -137,7 +141,7 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
       variables: {
         ...values,
         caseId: state.caseId,
-        firstResponserId,
+        firstResponserId: auth.firstResponser_id,
       },
     });
     const { updateArrested } = res.data;
@@ -165,7 +169,143 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
     dispatch(actions.getArrested([...state.arrestedsList]));
   };
 
+  const getCasualties = async () => {
+    const res = await client.query({
+      query: GET_CASUALTIES,
+      variables: {
+        id: state.caseId,
+      },
+    });
+    const data = res.data.CasualtiesWithFilter.edges.map(item => {
+      return { mongoId: item.node.mongoId, ...item.node.profile };
+    });
+
+    dispatch(actions.setCasualties(data));
+  };
+  const addCasualty = async values => {
+    const res = await client.mutate({
+      mutation: ADD_CASUALTY,
+      variables: {
+        ...values,
+        caseId: state.caseId,
+        firstResponserId: auth.firstResponser_id,
+      },
+    });
+
+    const { mongoId, profile } = res.data.addCasualty
+    const aux = [
+      ...state.casualties,
+      { mongoId, ...profile }
+    ]
+
+    dispatch(actions.setCasualties(aux));
+  };
+  const editCasualty = async values => {
+    const res = await client.mutate({
+      mutation: UPDATE_CASUALTY,
+      variables: {
+        ...values,
+        caseId: state.caseId,
+        firstResponserId: auth.firstResponser_id,
+      },
+    });
+    const { mongoId, profile } = res.data.updateCasualty;
+    const index = state.arrestedsList.findIndex( item => item.mongoId === mongoId);
+    const aux = [...state.casualties]
+    aux[index] = { mongoId, ...profile }
+    
+    dispatch(actions.getWitness(aux));
+  };
+  const deleteCasualty = async mongoId => {
+    const res = await client.mutate({ mutation: DELETE_CASUALTY, variables: { mongoId } });
+
+    const index = state.arrestedsList.findIndex(item => item.mongoId === mongoId);
+    const aux = [...state.casualties]
+    aux.splice(index, 1);
+
+    dispatch(actions.getArrested(aux));
+  };
+
+  const getCrimes = async () => {
+    const res = await client.query({ query: GET_CRIMES });
+
+    dispatch(actions.setCrimes(res.data.crimes.edges.map(item => item.node)))
+  }
+
+  const addSupports = async (supports: string[]) => {
+    console.log("🚀 ~ file: actions.ts:192 ~ addSupports ~ supports:", supports)
+    if(!state.case) return
+
+    try {
+      loaderActions.show()
+
+      const res = await client.mutate({
+        mutation: ADD_SUPPORTS,
+        variables: {
+          id: state.case.mongoId,
+          supports
+        }
+      })
+
+      dispatch(actions.setCase({
+        ...state.case,
+        support: get(res.data, 'updateCase.support', null)
+      }))
+
+      loaderActions.hide()
+    } catch (error) {
+      console.log("🚀 ~ file: actions.ts:209 ~ addSupports ~ error:", error)
+      loaderActions.hide()
+    }
+  }
+
+  const saveSummary = async (form: SummaryForm) => {
+    if(!state.case) return
+    
+    try {
+      loaderActions.show()
+      if(state.case.summary){
+        const res = await client.mutate({
+          mutation: UPDATE_SUMMARY,
+          variables: {
+            id: state.case.summary.id,
+            ...form
+          },
+        });
+  
+        dispatch(actions.setCase({ 
+          ...state.case,
+          summary: {
+            id: res.data.updateSummary.mongoId,
+            ...form
+          }
+        }))
+      }
+      else {
+        const res = await client.mutate({
+          mutation: CREATE_SUMMARY,
+          variables: {
+            caseId: state.case.mongoId,
+            ...form
+          },
+        });
+
+        dispatch(actions.setCase({ 
+          ...state.case,
+          summary: {
+            id: res.data.addSummary.mongoId,
+            ...form
+          }
+        }))
+      }
+      loaderActions.hide()
+    } catch (error) {
+      loaderActions.hide()
+    }
+  }
+
   return {
+    getCrimes,
     getCase,
     addWitness,
     getWitness,
@@ -175,5 +315,11 @@ export const useActions = (state: State, dispatch: Dispatch<Action<Types>>): Act
     getArrested,
     deleteWitness,
     deleteArrested,
+    getCasualties,
+    addCasualty,
+    editCasualty,
+    deleteCasualty,
+    saveSummary,
+    addSupports
   };
 };

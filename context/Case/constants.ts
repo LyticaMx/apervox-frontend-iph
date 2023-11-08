@@ -1,5 +1,5 @@
 import { createAction } from 'types/contextReducer';
-import { witness, arresteds, APIAssitanListResponse, Case } from './types';
+import { witness, arresteds, APIAssitanListResponse, Case, Crime, Casualty } from './types';
 
 export enum Types {
   ADD_CASE = 'case/addCase',
@@ -11,6 +11,8 @@ export enum Types {
   EDIT_ARRESTED = 'case/editArrested',
   GET_ARRESTED = 'case/getArrested',
   DELETE_ARRESTED = 'case/deleteArrested',
+  SET_CRIMES = 'case/setCrimes',
+  SET_CASUALTIES = 'case/setCasualties',
 }
 export const actions = {
   setCase: createAction<Types, Case>(Types.ADD_CASE),
@@ -22,4 +24,6 @@ export const actions = {
   getArrested: createAction<Types, APIAssitanListResponse[]>(Types.GET_ARRESTED),
   editArrested: createAction<Types, arresteds | undefined>(Types.EDIT_ARRESTED),
   deleteArrested: createAction<Types, arresteds>(Types.DELETE_ARRESTED),
+  setCrimes: createAction<Types, Crime[]>(Types.SET_CRIMES),
+  setCasualties: createAction<Types, Casualty[]>(Types.SET_CASUALTIES),
 };

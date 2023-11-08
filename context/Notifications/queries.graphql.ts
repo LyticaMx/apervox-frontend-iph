@@ -33,6 +33,7 @@ query MyQuery($id: String!) {
           longitude
           responses {
             id
+            status
           }
         }
       }
@@ -41,10 +42,10 @@ query MyQuery($id: String!) {
 `
 
 export const CREATE_NOTIFICATION_RESPONSE = gql`
-  mutation create(
+  mutation createResponse(
     $notificationId: String!
     $firstresponserId: String!
-    $status: String!
+    $status: StatusNR!
   ) {
     addNotificationResponse(
       newNotificationResponse: {
@@ -63,9 +64,9 @@ export const CREATE_NOTIFICATION_RESPONSE = gql`
 `
 
 export const UPDATE_NOTIFICATION_RESPONSE = gql`
-  mutation update(
+  mutation updateResponse(
     $id: String!
-    $status: String!
+    $status: StatusNR!
   ) {
     updateNotificationResponse(
       payload: {
@@ -73,14 +74,14 @@ export const UPDATE_NOTIFICATION_RESPONSE = gql`
         data: { status: $status }
       }
     ) {
-      profile {
-        fathersName
-        firstName
-        fullName
-        id
-        mothersName
+      status
+      notification {
+        case {
+          id
+          status
+          folio
+        }
       }
-      mongoId
     }
   }
 `
