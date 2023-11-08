@@ -1,5 +1,11 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { relayStylePagination } from "@apollo/client/utilities";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+if (process.env.NODE_ENV == "development") {  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -35,7 +41,8 @@ const cache = new InMemoryCache({
   },
 });
 
-const URI = "http://ec2-52-26-247-226.us-west-2.compute.amazonaws.com:8002/graphql"
+// const URI = "http://ec2-52-26-247-226.us-west-2.compute.amazonaws.com:8002/graphql"
+const URI = "https://n20hheyn60.execute-api.us-west-2.amazonaws.com/graphql"
 const client = new ApolloClient({
     uri: URI,
     cache,

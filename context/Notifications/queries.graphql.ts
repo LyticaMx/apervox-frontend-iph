@@ -23,7 +23,7 @@ query MyQuery ($first: Int!, $cursor: String ){
 
 export const GET_NOTIFICATION = gql`
 query MyQuery($id: String!) {
-    NotificationssWithFilter(id: $id) {
+    NotificationssWithFilter(payload: $id, type: id) {
       edges {
         node {
           mongoId
@@ -31,6 +31,55 @@ query MyQuery($id: String!) {
           description
           latitude
           longitude
+          responses {
+            id
+            status
+          }
+        }
+      }
+    }
+  }
+`
+
+export const CREATE_NOTIFICATION_RESPONSE = gql`
+  mutation createResponse(
+    $notificationId: String!
+    $firstresponserId: String!
+    $status: StatusNR!
+  ) {
+    addNotificationResponse(
+      newNotificationResponse: {
+        notificationId: $notificationId
+        firstresponserId: $firstresponserId
+        status: $status
+      }
+    ) {
+      stopTime
+      updatedAt
+      status
+      mongoId
+      createdAt
+    }
+  }
+`
+
+export const UPDATE_NOTIFICATION_RESPONSE = gql`
+  mutation updateResponse(
+    $id: String!
+    $status: StatusNR!
+  ) {
+    updateNotificationResponse(
+      payload: {
+        id: $id
+        data: { status: $status }
+      }
+    ) {
+      status
+      notification {
+        case {
+          id
+          status
+          folio
         }
       }
     }

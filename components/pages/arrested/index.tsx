@@ -1,5 +1,5 @@
 import { FormProfile } from '@/components/ui/FormProfile/FormProfile';
-import { useCases } from '@/context/Cases';
+import { useCase } from '@/context/Case';
 import {
   IonButton,
   IonButtons,
@@ -15,7 +15,7 @@ import { useRef } from 'react';
 
 const Arrested = () => {
   const history = useHistory();
-  const { actions } = useCases();
+  const { actions } = useCase();
   const formikRef = useRef(null);
   const { state } = useLocation();
 

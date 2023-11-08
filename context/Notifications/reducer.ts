@@ -10,6 +10,8 @@ export const reducer = (state: State, action: Action<Types>): State => {
       return { ...state, pagination: action.payload }
     case Types.SET_NOTIFICATION:
       return { ...state, notification: action.payload }
+    case Types.SET_RESPONSE:
+      return { ...state, notificationResponse: action.payload }
     
     default:
       return state

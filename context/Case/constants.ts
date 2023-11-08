@@ -1,17 +1,21 @@
 import { createAction } from 'types/contextReducer';
-import { witness, arresteds, APIAssitanListResponse } from './types';
+import { witness, arresteds, APIAssitanListResponse, Case, Crime, Casualty } from './types';
 
 export enum Types {
-  ADD_WITNESS = 'cases/addWitness',
-  EDIT_WITNESS = 'cases/editWitness',
-  GET_WITNESS = 'cases/getWitness',
-  DELETE_WITNESS = 'cases/deleteWitness',
-  ADD_ARRESTED = 'cases/addArrested',
-  EDIT_ARRESTED = 'cases/editArrested',
-  GET_ARRESTED = 'cases/getArrested',
-  DELETE_ARRESTED = 'cases/deleteArrested',
+  ADD_CASE = 'case/addCase',
+  ADD_WITNESS = 'case/addWitness',
+  EDIT_WITNESS = 'case/editWitness',
+  GET_WITNESS = 'case/getWitness',
+  DELETE_WITNESS = 'case/deleteWitness',
+  ADD_ARRESTED = 'case/addArrested',
+  EDIT_ARRESTED = 'case/editArrested',
+  GET_ARRESTED = 'case/getArrested',
+  DELETE_ARRESTED = 'case/deleteArrested',
+  SET_CRIMES = 'case/setCrimes',
+  SET_CASUALTIES = 'case/setCasualties',
 }
 export const actions = {
+  setCase: createAction<Types, Case>(Types.ADD_CASE),
   addWitness: createAction<Types, witness>(Types.ADD_WITNESS),
   editWitness: createAction<Types, witness>(Types.EDIT_WITNESS),
   deleteWitness: createAction<Types, witness>(Types.DELETE_WITNESS),
@@ -20,4 +24,6 @@ export const actions = {
   getArrested: createAction<Types, APIAssitanListResponse[]>(Types.GET_ARRESTED),
   editArrested: createAction<Types, arresteds | undefined>(Types.EDIT_ARRESTED),
   deleteArrested: createAction<Types, arresteds>(Types.DELETE_ARRESTED),
+  setCrimes: createAction<Types, Crime[]>(Types.SET_CRIMES),
+  setCasualties: createAction<Types, Casualty[]>(Types.SET_CASUALTIES),
 };
